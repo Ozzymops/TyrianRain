@@ -15,5 +15,14 @@ namespace TyrianRain.Modules
         internal const float gunDamageCoefficient = 4.2f;
 
         internal const float bombDamageCoefficient = 16f;
+
+        internal const float greatswordSwingDamageCoefficient = 1.5f;
+        internal const float greatswordSliceDamageCoefficient = 2.0f;
+        internal const float greatswordBrutalStrikeDamageCoefficient = 3.0f;
+        internal const float greatswordBladetrailDamageCoefficient = 2.5f;
+        internal const float greatswordWhirlwindAttackDamageCoefficient = 2.0f;
+        internal const float greatswordHundredBladesDamageCoefficient = 1.5f;
+        internal const float greatswordHundredBladesFinishDamageCoefficient = 5.0f;
+        internal const float greatswordArcingSliceDamageCoefficient = 12.5f;
     }
 }

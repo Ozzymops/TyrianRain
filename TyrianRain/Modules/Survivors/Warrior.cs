@@ -96,16 +96,16 @@ namespace TyrianRain.Modules.Survivors
             string prefix = TyrianRain.developerPrefix;
 
             #region Primary
-            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_SLASH_NAME", prefix + "_HENRY_BODY_PRIMARY_SLASH_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"), true));
+            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_GREATSWORD_CHAIN_NAME", prefix + "_HENRY_BODY_PRIMARY_GREATSWORD_CHAIN_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Weapon_Greatsword"), true));
             #endregion
 
             #region Secondary
             SkillDef shootSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = prefix + "_HENRY_BODY_SECONDARY_GUN_NAME",
-                skillNameToken = prefix + "_HENRY_BODY_SECONDARY_GUN_NAME",
-                skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_GUN_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
+                skillName = prefix + "_HENRY_BODY_SECONDARY_GREATSWORD_BLADETRAIL_NAME",
+                skillNameToken = prefix + "_HENRY_BODY_SECONDARY_GREATSWORD_BLADETRAIL_NAME",
+                skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_GREATSWORD_BLADETRAIL_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Greatsword_Bladetrail"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shoot)),
                 activationStateMachineName = "Slide",
                 baseMaxStock = 1,
@@ -122,7 +122,7 @@ namespace TyrianRain.Modules.Survivors
                 rechargeStock = 1,
                 requiredStock = 1,
                 stockToConsume = 1,
-                keywordTokens = new string[] { "KEYWORD_AGILE" }
+                keywordTokens = null
             });
 
             Modules.Skills.AddSecondarySkills(bodyPrefab, shootSkillDef);
@@ -131,10 +131,10 @@ namespace TyrianRain.Modules.Survivors
             #region Utility
             SkillDef rollSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = prefix + "_HENRY_BODY_UTILITY_ROLL_NAME",
-                skillNameToken = prefix + "_HENRY_BODY_UTILITY_ROLL_NAME",
-                skillDescriptionToken = prefix + "_HENRY_BODY_UTILITY_ROLL_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
+                skillName = prefix + "_HENRY_BODY_UTILITY_GREATSWORD_WHIRLWINDATTACK_NAME",
+                skillNameToken = prefix + "_HENRY_BODY_UTILITY_GREATSWORD_WHIRLWINDATTACK_NAME",
+                skillDescriptionToken = prefix + "_HENRY_BODY_UTILITY_GREATSWORD_WHIRLWINDATTACK_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Greatsword_WhirlwindAttack"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Roll)),
                 activationStateMachineName = "Body",
                 baseMaxStock = 1,
@@ -159,10 +159,10 @@ namespace TyrianRain.Modules.Survivors
             #region Special
             SkillDef bombSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = prefix + "_HENRY_BODY_SPECIAL_BOMB_NAME",
-                skillNameToken = prefix + "_HENRY_BODY_SPECIAL_BOMB_NAME",
-                skillDescriptionToken = prefix + "_HENRY_BODY_SPECIAL_BOMB_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                skillName = prefix + "_HENRY_BODY_SPECIAL_GREATSWORD_HUNDREDBLADES_NAME",
+                skillNameToken = prefix + "_HENRY_BODY_SPECIAL_GREATSWORD_HUNDREDBLADES_NAME",
+                skillDescriptionToken = prefix + "_HENRY_BODY_SPECIAL_GREATSWORD_HUNDREDBLADES_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Greatsword_HundredBlades"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
                 activationStateMachineName = "Slide",
                 baseMaxStock = 1,
