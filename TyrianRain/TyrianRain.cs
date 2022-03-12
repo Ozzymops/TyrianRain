@@ -2,6 +2,7 @@
 using TyrianRain.Modules.Survivors;
 using R2API.Utils;
 using RoR2;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Security;
 using System.Security.Permissions;
@@ -62,6 +63,7 @@ namespace TyrianRain
         private void Hook()
         {
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
+            On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
         }
 
         private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
@@ -70,11 +72,55 @@ namespace TyrianRain
 
             if (self)
             {
-                if (self.HasBuff(Modules.Buffs.armorBuff))
+                // fury
+                if (self.HasBuff(Modules.Buffs.boonFury))
                 {
-                    self.armor += 300f;
+                    self.crit += 20;
+                    self.critMultiplier += 0.2f;
+                }
+
+                // alacrity
+                if (self.HasBuff(Modules.Buffs.boonAlacrity))
+                {
+                    self.skillLocator.primary.cooldownScale = 0.75f;
+                    self.skillLocator.secondary.cooldownScale = 0.75f;
+                    self.skillLocator.utility.cooldownScale = 0.75f;
+                    self.skillLocator.special.cooldownScale = 0.75f;
+                }
+
+                // might
+                if (self.HasBuff(Modules.Buffs.boonMight))
+                {
+                    self.damage *= 1 + 0.02f * self.GetBuffCount(Modules.Buffs.boonMight);
                 }
             }
+        }
+
+        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
+        {
+            if (self)
+            {
+                // aegis
+                if (self.body.HasBuff(Modules.Buffs.boonAegis))
+                {
+                    if (damageInfo.damageType != DamageType.DoT && damageInfo.damageType != DamageType.VoidDeath)
+                    {
+                        EffectData effectData = new EffectData { origin = damageInfo.position, rotation = Util.QuaternionSafeLookRotation((damageInfo.force != Vector3.zero ? damageInfo.force : UnityEngine.Random.onUnitSphere)) };
+                        EffectManager.SpawnEffect(LegacyResourcesAPI.Load<GameObject>("prefabs/effects/BearProc"), effectData, true);
+
+                        damageInfo.rejected = true;
+
+                        Modules.Buffs.HandleTimedBuff(Modules.Buffs.boonAegis, self.body, 1);
+                    }
+                }
+            }
+
+            if (damageInfo.attacker)
+            {
+                CharacterBody attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();  
+            }
+
+            orig(self, damageInfo);
         }
     }
 }

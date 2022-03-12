@@ -6,17 +6,31 @@ namespace TyrianRain.Modules
 {
     public static class Buffs
     {
-        // armor buff gained during roll
-        internal static BuffDef armorBuff;
+        // boons
+        internal static BuffDef boonAegis;
+        internal static BuffDef boonAlacrity;
+        internal static BuffDef boonFury;
+        internal static BuffDef boonMight;
+        internal static BuffDef boonProtection;
+        internal static BuffDef boonQuickness;
+        internal static BuffDef boonRegeneration;
+        internal static BuffDef boonResistance;
+        internal static BuffDef boonResolution;
+        internal static BuffDef boonStability;
+        internal static BuffDef boonSwiftness;
+        internal static BuffDef boonVigor;
 
         internal static List<BuffDef> buffDefs = new List<BuffDef>();
 
         internal static void RegisterBuffs()
         {
-            armorBuff = AddNewBuff("HenryArmorBuff", LegacyResourcesAPI.Load<Sprite>("Textures/BuffIcons/texBuffGenericShield"), Color.white, false, false);
+            // boons
+            boonAegis = AddNewBuff("TyrianRainBoonAegis", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Aegis"), Color.white, false, false);
+            boonAlacrity = AddNewBuff("TyrianRainBoonAlacrity", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Alacrity"), Color.white, false, false);
+            boonFury = AddNewBuff("TyrianRainBoonFury", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Fury"), Color.white, false, false);
+            boonMight = AddNewBuff("TyrianRainBoonMight", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Might"), Color.white, true, false);
         }
 
-        // simple helper method
         internal static BuffDef AddNewBuff(string buffName, Sprite buffIcon, Color buffColor, bool canStack, bool isDebuff)
         {
             BuffDef buffDef = ScriptableObject.CreateInstance<BuffDef>();
@@ -30,6 +44,32 @@ namespace TyrianRain.Modules
             buffDefs.Add(buffDef);
 
             return buffDef;
+        }
+
+        public static void HandleTimedBuff(BuffDef buffDef, CharacterBody body, int maxStacks)
+        {
+            int buffCount = 0;
+            float buffTimer = 0f;
+
+            foreach (CharacterBody.TimedBuff buff in body.timedBuffs)
+            {
+                if (buff.buffIndex == buffDef.buffIndex)
+                {
+                    if (buffTimer > buff.timer || buffTimer == 0f)
+                    {
+                        buffTimer = buff.timer;
+                    }
+
+                    buffCount++;
+                }
+            }
+
+            body.ClearTimedBuffs(buffDef);
+
+            for (int i = 1; i < buffCount; i++)
+            {
+                body.AddTimedBuff(buffDef, buffTimer, maxStacks);
+            }
         }
     }
 }

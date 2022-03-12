@@ -51,8 +51,10 @@ namespace TyrianRain.SkillStates
 
             if (NetworkServer.active)
             {
-                base.characterBody.AddTimedBuff(Modules.Buffs.armorBuff, 3f * Roll.duration);
-                base.characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.5f * Roll.duration);
+                // temporary for testing
+                base.characterBody.AddTimedBuff(Modules.Buffs.boonAegis, 10f);
+                base.characterBody.AddTimedBuff(Modules.Buffs.boonFury, 10f);
+                base.characterBody.AddTimedBuff(Modules.Buffs.boonAlacrity, 10f);
             }
         }
 

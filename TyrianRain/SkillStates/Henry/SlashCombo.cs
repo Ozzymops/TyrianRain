@@ -1,6 +1,7 @@
 ﻿using TyrianRain.SkillStates.BaseStates;
 using RoR2;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace TyrianRain.SkillStates
 {
@@ -47,6 +48,11 @@ namespace TyrianRain.SkillStates
         protected override void OnHitEnemyAuthority()
         {
             base.OnHitEnemyAuthority();
+
+            if (NetworkServer.active)
+            {
+                base.characterBody.AddTimedBuff(Modules.Buffs.boonMight, 10f, 25);
+            }
         }
 
         protected override void SetNextState()
