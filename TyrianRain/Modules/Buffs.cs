@@ -29,6 +29,11 @@ namespace TyrianRain.Modules
             boonAlacrity = AddNewBuff("TyrianRainBoonAlacrity", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Alacrity"), Color.white, false, false);
             boonFury = AddNewBuff("TyrianRainBoonFury", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Fury"), Color.white, false, false);
             boonMight = AddNewBuff("TyrianRainBoonMight", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Might"), Color.white, true, false);
+            boonProtection = AddNewBuff("TyrianRainBoonProtection", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Protection"), Color.white, false, false);
+            boonQuickness = AddNewBuff("TyrianRainBoonQuickness", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Quickness"), Color.white, false, false);
+            boonRegeneration = AddNewBuff("TyrianRainBoonRegeneration", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Regeneration"), Color.white, false, false);
+            boonResistance = AddNewBuff("TyrianRainBoonResistance", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Resistance"), Color.white, false, false);
+            boonResolution = AddNewBuff("TyrianRainBoonResolution", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Resolution"), Color.white, false, false);
         }
 
         internal static BuffDef AddNewBuff(string buffName, Sprite buffIcon, Color buffColor, bool canStack, bool isDebuff)

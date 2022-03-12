@@ -93,6 +93,24 @@ namespace TyrianRain
                 {
                     self.damage *= 1 + 0.02f * self.GetBuffCount(Modules.Buffs.boonMight);
                 }
+
+                // quickness
+                if (self.HasBuff(Modules.Buffs.boonQuickness))
+                {
+                    self.attackSpeed *= 1.2f;
+                }
+
+                // regeneration
+                if (self.HasBuff(Modules.Buffs.boonRegeneration))
+                {
+                    self.regen += 5;
+                }
+
+                // resistance
+                if (self.HasBuff(Modules.Buffs.boonResistance))
+                {
+                    // remove non-damaging debuffs
+                }
             }
         }
 
@@ -111,6 +129,24 @@ namespace TyrianRain
                         damageInfo.rejected = true;
 
                         Modules.Buffs.HandleTimedBuff(Modules.Buffs.boonAegis, self.body, 1);
+                    }
+                }
+
+                // protection
+                if (self.body.HasBuff(Modules.Buffs.boonProtection))
+                {
+                    if (damageInfo.damageType != DamageType.DoT)
+                    {
+                        damageInfo.damage *= 0.66f;
+                    }
+                }
+
+                // resolution
+                if (self.body.HasBuff(Modules.Buffs.boonResolution))
+                {
+                    if (damageInfo.damageType == DamageType.DoT)
+                    {
+                        damageInfo.damage *= 0.66f;
                     }
                 }
             }
