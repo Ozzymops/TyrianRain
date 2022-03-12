@@ -34,6 +34,9 @@ namespace TyrianRain.Modules
             boonRegeneration = AddNewBuff("TyrianRainBoonRegeneration", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Regeneration"), Color.white, false, false);
             boonResistance = AddNewBuff("TyrianRainBoonResistance", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Resistance"), Color.white, false, false);
             boonResolution = AddNewBuff("TyrianRainBoonResolution", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Resolution"), Color.white, false, false);
+            boonStability = AddNewBuff("TyrianRainBoonStability", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Stability"), Color.white, false, false);
+            boonSwiftness = AddNewBuff("TyrianRainBoonSwiftness", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Swiftness"), Color.white, false, false);
+            boonVigor = AddNewBuff("TyrianRainBoonVigor", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Vigor"), Color.white, false, false);
         }
 
         internal static BuffDef AddNewBuff(string buffName, Sprite buffIcon, Color buffColor, bool canStack, bool isDebuff)

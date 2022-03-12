@@ -52,11 +52,9 @@ namespace TyrianRain.SkillStates
             if (NetworkServer.active)
             {
                 // temporary for testing
-                base.characterBody.AddTimedBuff(Modules.Buffs.boonProtection, 10f);
-                base.characterBody.AddTimedBuff(Modules.Buffs.boonQuickness, 10f);
-                base.characterBody.AddTimedBuff(Modules.Buffs.boonRegeneration, 10f);
-                base.characterBody.AddTimedBuff(Modules.Buffs.boonResistance, 10f);
-                base.characterBody.AddTimedBuff(Modules.Buffs.boonResolution, 10f);
+                base.characterBody.AddTimedBuff(Modules.Buffs.boonStability, 10f);
+                base.characterBody.AddTimedBuff(Modules.Buffs.boonSwiftness, 10f);
+                base.characterBody.AddTimedBuff(Modules.Buffs.boonVigor, 10f);
             }
         }
 

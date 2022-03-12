@@ -111,6 +111,18 @@ namespace TyrianRain
                 {
                     // remove non-damaging debuffs
                 }
+
+                // swiftness
+                if (self.HasBuff(Modules.Buffs.boonSwiftness))
+                {
+                    self.moveSpeed *= 1.33f;
+                }
+
+                // vigor
+                if (self.HasBuff(Modules.Buffs.boonVigor))
+                {
+                    self.skillLocator.utility.cooldownScale = 0.33f;
+                }
             }
         }
 
@@ -148,6 +160,12 @@ namespace TyrianRain
                     {
                         damageInfo.damage *= 0.66f;
                     }
+                }
+
+                // stability
+                if (self.body.HasBuff(Modules.Buffs.boonStability))
+                {
+                    damageInfo.force = Vector3.zero;
                 }
             }
 
