@@ -174,7 +174,7 @@ namespace TyrianRain.Modules
 
         internal static Texture LoadCharacterIcon(string characterName)
         {
-            return mainAssetBundle.LoadAsset<Texture>("tex" + characterName + "Icon");
+            return mainAssetBundle.LoadAsset<Texture>(characterName);
         }
 
         internal static GameObject LoadCrosshair(string crosshairName)

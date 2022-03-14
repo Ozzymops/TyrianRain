@@ -51,6 +51,16 @@ namespace TyrianRain.Modules
             skillFamilies.Add(specialFamily);
         }
 
+        internal static void AddPassiveSkill(GameObject targetPrefab, SkillFamily.Variant[] variants)
+        {
+            GenericSkill genericSkill = targetPrefab.AddComponent<GenericSkill>();
+
+            SkillFamily skillFamily = ScriptableObject.CreateInstance<SkillFamily>();
+            skillFamily.variants = variants;
+
+            genericSkill._skillFamily = skillFamily;
+        }
+
         // this could all be a lot cleaner but at least it's simple and easy to work with
         internal static void AddPrimarySkill(GameObject targetPrefab, SkillDef skillDef)
         {
@@ -130,6 +140,27 @@ namespace TyrianRain.Modules
             {
                 AddSpecialSkill(targetPrefab, i);
             }
+        }
+
+        internal static SkillFamily.Variant CreatePassiveSkillDef(string skillNameToken, string skillDescriptionToken, Sprite skillIcon)
+        {
+            SkillDef passiveSkillDef = ScriptableObject.CreateInstance<SkillDef>();
+
+            passiveSkillDef.skillNameToken = skillNameToken;
+            passiveSkillDef.skillDescriptionToken = skillDescriptionToken;
+            passiveSkillDef.icon = skillIcon;
+            passiveSkillDef.activationState = new EntityStates.SerializableEntityStateType(typeof(EntityStates.BaseState));
+            passiveSkillDef.activationStateMachineName = "Weapon";
+            passiveSkillDef.keywordTokens = null;
+
+            SkillFamily.Variant variant = new SkillFamily.Variant
+            {
+                skillDef = passiveSkillDef,
+                unlockableDef = null,
+                viewableNode = new ViewablesCatalog.Node(passiveSkillDef.skillNameToken, isFolder: false)
+            };
+
+            return variant;
         }
 
         internal static SkillDef CreatePrimarySkillDef(SerializableEntityStateType state, string stateMachine, string skillNameToken, string skillDescriptionToken, Sprite skillIcon, bool agile)

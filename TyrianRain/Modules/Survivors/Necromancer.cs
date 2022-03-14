@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace TyrianRain.Modules.Survivors
 {
-    internal class Warrior : SurvivorBase
+    internal class Necromancer : SurvivorBase
     {
-        string warriorPrefix = TyrianRain.developerPrefix + "_WARRIOR_BODY_";
-        internal override string bodyName { get; set; } = "Warrior";
+        string necromancerPrefix = TyrianRain.developerPrefix + "_NECROMANCER_BODY_";
+        internal override string bodyName { get; set; } = "Necromancer";
 
         internal override GameObject bodyPrefab { get; set; }
         internal override GameObject displayPrefab { get; set; }
@@ -23,17 +23,17 @@ namespace TyrianRain.Modules.Survivors
         {
             armor = 20f,
             armorGrowth = 0f,
-            bodyName = "WarriorBody",
-            bodyNameToken = TyrianRain.developerPrefix + "_WARRIOR_BODY_NAME",
-            bodyColor = Color.yellow,
-            characterPortrait = Modules.Assets.LoadCharacterIcon("Icon_Class_Warrior"),
+            bodyName = "NecromancerBody",
+            bodyNameToken = TyrianRain.developerPrefix + "_HENRY_BODY_NECROMANCER_NAME",
+            bodyColor = Color.green,
+            characterPortrait = Modules.Assets.LoadCharacterIcon("Icon_Class_Necromancer"),
             crosshair = Modules.Assets.LoadCrosshair("Standard"),
             damage = 12f,
             healthGrowth = 48f,
             healthRegen = 1.0f,
             jumpCount = 1,
             maxHealth = 160f,
-            subtitleNameToken = TyrianRain.developerPrefix + "_WARRIOR_BODY_SUBTITLE",
+            subtitleNameToken = TyrianRain.developerPrefix + "_HENRY_BODY_NECROMANCER_SUBTITLE",
             podPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod")
         };
 
@@ -64,7 +64,7 @@ namespace TyrianRain.Modules.Survivors
         internal override List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules { get; set; }
 
         internal override UnlockableDef characterUnlockableDef { get; set; }
-        private static UnlockableDef warriorMasterySkinUnlockableDef;
+        private static UnlockableDef necromancerMasterySkinUnlockableDef;
 
         internal override void InitializeCharacter()
         {
@@ -73,7 +73,7 @@ namespace TyrianRain.Modules.Survivors
 
         internal override void InitializeUnlockables()
         {
-            // warriorMasterySkinUnlockableDef = Modules.Unlockables.AddUnlockable<Achievements.MasteryAchievement>(true);
+            // necromancerMasterySkinUnlockableDef = Modules.Unlockables.AddUnlockable<Achievements.MasteryAchievement>(true);
         }
 
         internal override void InitializeDoppelganger()
@@ -96,26 +96,25 @@ namespace TyrianRain.Modules.Survivors
 
             string prefix = TyrianRain.developerPrefix;
 
-            #region Passive
+            #region Passive        
             Modules.Skills.AddPassiveSkill(bodyPrefab, new SkillFamily.Variant[]
             {
-                Modules.Skills.CreatePassiveSkillDef(warriorPrefix + "PASSIVE_WARRIOR_NAME", warriorPrefix + "PASSIVE_WARRIOR_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Class_Warrior")),
-                Modules.Skills.CreatePassiveSkillDef(warriorPrefix + "PASSIVE_BERSERKER_NAME", warriorPrefix + "PASSIVE_BERSERKER_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Class_Berserker"))
+                Modules.Skills.CreatePassiveSkillDef(necromancerPrefix + "PASSIVE_NECROMANCER_NAME", necromancerPrefix + "PASSIVE_NECROMANCER_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Class_Necromancer")),
+                Modules.Skills.CreatePassiveSkillDef(necromancerPrefix + "PASSIVE_REAPER_NAME", necromancerPrefix + "PASSIVE_REAPER_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Class_Reaper"))
             });
-
             #endregion
 
             #region Primary
-            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)), "Weapon", warriorPrefix + "PRIMARY_GREATSWORD_CHAIN_NAME", warriorPrefix + "PRIMARY_GREATSWORD_CHAIN_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Weapon_Greatsword"), true));
+            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)), "Weapon", necromancerPrefix + "PRIMARY_SCEPTER_CHAIN_NAME", necromancerPrefix + "PRIMARY_SCEPTER_CHAIN_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Scepter_BloodCurse"), true));
             #endregion
 
             #region Secondary
             SkillDef shootSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = warriorPrefix + "SECONDARY_GREATSWORD_BLADETRAIL_NAME",
-                skillNameToken = warriorPrefix + "SECONDARY_GREATSWORD_BLADETRAIL_NAME",
-                skillDescriptionToken = warriorPrefix + "SECONDARY_GREATSWORD_BLADETRAIL_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Greatsword_Bladetrail"),
+                skillName = necromancerPrefix + "SECONDARY_SCEPTER_DEATHLYSWARM_NAME",
+                skillNameToken = necromancerPrefix + "SECONDARY_SCEPTER_DEATHLYSWARM_NAME",
+                skillDescriptionToken = necromancerPrefix + "SECONDARY_SCEPTER_DEATHLYSWARM_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Scepter_DeathlySwarm"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shoot)),
                 activationStateMachineName = "Slide",
                 baseMaxStock = 1,
@@ -141,10 +140,10 @@ namespace TyrianRain.Modules.Survivors
             #region Utility
             SkillDef rollSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = warriorPrefix + "UTILITY_GREATSWORD_WHIRLWINDATTACK_NAME",
-                skillNameToken = warriorPrefix + "UTILITY_GREATSWORD_WHIRLWINDATTACK_NAME",
-                skillDescriptionToken = warriorPrefix + "UTILITY_GREATSWORD_WHIRLWINDATTACK_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Greatsword_WhirlwindAttack"),
+                skillName = necromancerPrefix + "UTILITY_SCEPTER_LIFESIPHON_NAME",
+                skillNameToken = necromancerPrefix + "UTILITY_SCEPTER_LIFESIPHON_NAME",
+                skillDescriptionToken = necromancerPrefix + "UTILITY_SCEPTER_LIFESIPHON_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Scepter_LifeSiphon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Roll)),
                 activationStateMachineName = "Body",
                 baseMaxStock = 1,
@@ -169,10 +168,10 @@ namespace TyrianRain.Modules.Survivors
             #region Special
             SkillDef bombSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = warriorPrefix + "SPECIAL_GREATSWORD_HUNDREDBLADES_NAME",
-                skillNameToken = warriorPrefix + "SPECIAL_GREATSWORD_HUNDREDBLADES_NAME",
-                skillDescriptionToken = warriorPrefix + "SPECIAL_GREATSWORD_HUNDREDBLADES_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Greatsword_HundredBlades"),
+                skillName = necromancerPrefix + "SPECIAL_SCEPTER_FEASTOFCORRUPTION_NAME",
+                skillNameToken = necromancerPrefix + "SPECIAL_SCEPTER_FEASTOFCORRUPTION_NAME",
+                skillDescriptionToken = necromancerPrefix + "SPECIAL_SCEPTER_FEASTOFCORRUPTION_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Scepter_FeastOfCorruption"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
                 activationStateMachineName = "Slide",
                 baseMaxStock = 1,
@@ -210,7 +209,7 @@ namespace TyrianRain.Modules.Survivors
             List<SkinDef> skins = new List<SkinDef>();
 
             #region DefaultSkin
-            SkinDef defaultSkin = Modules.Skins.CreateSkinDef(warriorPrefix + "DEFAULT_SKIN_NAME",
+            SkinDef defaultSkin = Modules.Skins.CreateSkinDef(necromancerPrefix + "DEFAULT_SKIN_NAME",
                 Assets.mainAssetBundle.LoadAsset<Sprite>("texMainSkin"),
                 defaultRenderers,
                 mainRenderer,
@@ -248,12 +247,12 @@ namespace TyrianRain.Modules.Survivors
                 masteryMat
             });
 
-            SkinDef masterySkin = Modules.Skins.CreateSkinDef(warriorPrefix + "MASTERY_SKIN_NAME",
+            SkinDef masterySkin = Modules.Skins.CreateSkinDef(necromancerPrefix + "MASTERY_SKIN_NAME",
                 Assets.mainAssetBundle.LoadAsset<Sprite>("texMasteryAchievement"),
                 masteryRendererInfos,
                 mainRenderer,
                 model,
-                warriorMasterySkinUnlockableDef);
+                necromancerMasterySkinUnlockableDef);
 
             masterySkin.meshReplacements = new SkinDef.MeshReplacement[]
             {

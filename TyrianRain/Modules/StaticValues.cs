@@ -24,5 +24,12 @@ namespace TyrianRain.Modules
         internal const float greatswordHundredBladesDamageCoefficient = 1.5f;
         internal const float greatswordHundredBladesFinishDamageCoefficient = 5.0f;
         internal const float greatswordArcingSliceDamageCoefficient = 12.5f;
+
+        internal const float scepterBloodCurseDamageCoefficient = 0.5f;
+        internal const float scepterRendingCurseDamageCoefficient = 0.75f;
+        internal const float scepterPutridCurseDamageCoefficient = 1.0f;
+        internal const float scepterDeathlySwarmDamageCoefficient = 1.0f;
+        internal const float scepterLifeSiphonDamageCoefficient = 0.5f;
+        internal const float scepterFeastOfCorruptionDamageCoefficient = 2.0f;
     }
 }

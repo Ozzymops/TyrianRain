@@ -20,6 +20,20 @@ namespace TyrianRain.Modules
         internal static BuffDef boonSwiftness;
         internal static BuffDef boonVigor;
 
+        // conditions
+        internal static BuffDef condiConfused;
+        internal static BuffDef condiPoisoned;
+        internal static BuffDef condiTormented;
+        internal static BuffDef condiBlinded;
+        internal static BuffDef condiChilled;
+        internal static BuffDef condiCrippled;
+        internal static BuffDef condiFeared;
+        internal static BuffDef condiImmobilized;
+        internal static BuffDef condiSlowed;
+        internal static BuffDef condiTaunted;
+        internal static BuffDef condiWeakened;
+        internal static BuffDef condiVulnerability;
+
         internal static List<BuffDef> buffDefs = new List<BuffDef>();
 
         internal static void RegisterBuffs()
@@ -37,6 +51,12 @@ namespace TyrianRain.Modules
             boonStability = AddNewBuff("TyrianRainBoonStability", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Stability"), Color.white, false, false);
             boonSwiftness = AddNewBuff("TyrianRainBoonSwiftness", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Swiftness"), Color.white, false, false);
             boonVigor = AddNewBuff("TyrianRainBoonVigor", Assets.mainAssetBundle.LoadAsset<Sprite>("Boon_Vigor"), Color.white, false, false);
+
+            // conditions
+            condiConfused = AddNewBuff("TyrianRainCondiConfused", Assets.mainAssetBundle.LoadAsset<Sprite>("Condi_Confusion"), Color.white, true, true);
+            condiPoisoned = AddNewBuff("TyrianRainCondiPoisoned", Assets.mainAssetBundle.LoadAsset<Sprite>("Condi_Poisoned"), Color.white, true, true);
+            condiTormented = AddNewBuff("TyrianRainCondiTormented", Assets.mainAssetBundle.LoadAsset<Sprite>("Condi_Torment"), Color.white, true, true);
+            condiBlinded = AddNewBuff("TyrianRainCondiBlinded", Assets.mainAssetBundle.LoadAsset<Sprite>("Condi_Blind"), Color.white, true, true);
         }
 
         internal static BuffDef AddNewBuff(string buffName, Sprite buffIcon, Color buffColor, bool canStack, bool isDebuff)

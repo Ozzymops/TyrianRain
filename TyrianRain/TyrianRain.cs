@@ -24,10 +24,10 @@ namespace TyrianRain
 
     public class TyrianRain : BaseUnityPlugin
     {
-        public const string MODUID = "com.Ozzymops.TyrianRain";
+        public const string MODUID = "Ozzymops.TyrianRain";
         public const string MODNAME = "TyrianRain";
         public const string MODVERSION = "1.0.0";
-        public const string developerPrefix = "ROB"; // change later!
+        public const string developerPrefix = "OZZ";
 
         internal List<SurvivorBase> Survivors = new List<SurvivorBase>();
 
@@ -48,6 +48,7 @@ namespace TyrianRain
             // Modules.ItemDisplays.PopulateDisplays();
 
             new Warrior().Initialize();
+            new Necromancer().Initialize();
             new Modules.ContentPacks().Initialize();
             RoR2.ContentManagement.ContentManager.onContentPacksAssigned += LateSetup;
 
@@ -64,6 +65,7 @@ namespace TyrianRain
         {
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
+            On.RoR2.GenericSkill.OnExecute += GenericSkill_OnExecute;
         }
 
         private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
@@ -171,10 +173,26 @@ namespace TyrianRain
 
             if (damageInfo.attacker)
             {
-                CharacterBody attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();  
+                CharacterBody attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
             }
 
             orig(self, damageInfo);
+        }
+
+        private void GenericSkill_OnExecute(On.RoR2.GenericSkill.orig_OnExecute orig, GenericSkill self)
+        {
+            orig(self);
+
+            // confusion
+            if (self.characterBody.HasBuff(Modules.Buffs.condiConfused))
+            {
+                self.characterBody.healthComponent.TakeDamage(new DamageInfo
+                {
+                    attacker = self.characterBody.gameObject,
+                    damage = self.characterBody.damage * (3.0f * self.characterBody.GetBuffCount(Modules.Buffs.condiConfused)),
+                    damageType = DamageType.BypassArmor
+                });
+            }
         }
     }
 }
