@@ -116,10 +116,12 @@ namespace TyrianRain.Modules.Survivors
 
             #region Primary
             Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Warrior.GreatswordSwing)), "Weapon", warriorPrefix + "PRIMARY_GREATSWORD_CHAIN_NAME", warriorPrefix + "PRIMARY_GREATSWORD_CHAIN_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Weapon_Greatsword"), true));
+            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Warrior.GreatswordSwing)), "Weapon", warriorPrefix + "PRIMARY_HAMMER_CHAIN_NAME", warriorPrefix + "PRIMARY_HAMMER_CHAIN_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Weapon_Hammer"), true));
+            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Warrior.GreatswordSwing)), "Weapon", warriorPrefix + "PRIMARY_RIFLE_FIERCESHOT_NAME", warriorPrefix + "PRIMARY_RIFLE_FIERCESHOT_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Weapon_Rifle"), true));
             #endregion
 
             #region Secondary
-            SkillDef shootSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef bladetrailSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = warriorPrefix + "SECONDARY_GREATSWORD_BLADETRAIL_NAME",
                 skillNameToken = warriorPrefix + "SECONDARY_GREATSWORD_BLADETRAIL_NAME",
@@ -144,11 +146,61 @@ namespace TyrianRain.Modules.Survivors
                 keywordTokens = null
             });
 
-            Modules.Skills.AddSecondarySkills(bodyPrefab, shootSkillDef);
+            SkillDef fierceBlowSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = warriorPrefix + "SECONDARY_HAMMER_FIERCEBLOW_NAME",
+                skillNameToken = warriorPrefix + "SECONDARY_HAMMER_FIERCEBLOW_NAME",
+                skillDescriptionToken = warriorPrefix + "SECONDARY_HAMMER_FIERCEBLOW_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Hammer_FierceBlow"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shoot)),
+                activationStateMachineName = "Slide",
+                baseMaxStock = 1,
+                baseRechargeInterval = 1f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = false,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+                resetCooldownTimerOnUse = false,
+                isCombatSkill = true,
+                mustKeyPress = false,
+                cancelSprintingOnActivation = false,
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1,
+                keywordTokens = null
+            });
+
+            SkillDef volleySkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = warriorPrefix + "SECONDARY_RIFLE_VOLLEY_NAME",
+                skillNameToken = warriorPrefix + "SECONDARY_RIFLE_VOLLEY_NAME",
+                skillDescriptionToken = warriorPrefix + "SECONDARY_RIFLE_VOLLEY_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Rifle_Volley"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shoot)),
+                activationStateMachineName = "Slide",
+                baseMaxStock = 1,
+                baseRechargeInterval = 1f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = false,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+                resetCooldownTimerOnUse = false,
+                isCombatSkill = true,
+                mustKeyPress = false,
+                cancelSprintingOnActivation = false,
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1,
+                keywordTokens = null
+            });
+
+            Modules.Skills.AddSecondarySkills(bodyPrefab, new SkillDef[] { bladetrailSkillDef, fierceBlowSkillDef, volleySkillDef });
             #endregion
 
             #region Utility
-            SkillDef rollSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef whirlwindAttackSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = warriorPrefix + "UTILITY_GREATSWORD_WHIRLWINDATTACK_NAME",
                 skillNameToken = warriorPrefix + "UTILITY_GREATSWORD_WHIRLWINDATTACK_NAME",
@@ -172,11 +224,59 @@ namespace TyrianRain.Modules.Survivors
                 stockToConsume = 1
             });
 
-            Modules.Skills.AddUtilitySkills(bodyPrefab, rollSkillDef);
+            SkillDef staggeringBlowSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = warriorPrefix + "UTILITY_HAMMER_STAGGERINGBLOW_NAME",
+                skillNameToken = warriorPrefix + "UTILITY_HAMMER_STAGGERINGBLOW_NAME",
+                skillDescriptionToken = warriorPrefix + "UTILITY_HAMMER_STAGGERINGBLOW_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Hammer_StaggeringBlow"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Roll)),
+                activationStateMachineName = "Body",
+                baseMaxStock = 1,
+                baseRechargeInterval = 4f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = true,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+                resetCooldownTimerOnUse = false,
+                isCombatSkill = false,
+                mustKeyPress = false,
+                cancelSprintingOnActivation = false,
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1
+            });
+
+            SkillDef brutalShotSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = warriorPrefix + "UTILITY_RIFLE_BRUTALSHOT_NAME",
+                skillNameToken = warriorPrefix + "UTILITY_RIFLE_BRUTALSHOT_NAME",
+                skillDescriptionToken = warriorPrefix + "UTILITY_RIFLE_BRUTALSHOT_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Rifle_BrutalShot"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Roll)),
+                activationStateMachineName = "Body",
+                baseMaxStock = 1,
+                baseRechargeInterval = 4f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = true,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+                resetCooldownTimerOnUse = false,
+                isCombatSkill = false,
+                mustKeyPress = false,
+                cancelSprintingOnActivation = false,
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1
+            });
+
+            Modules.Skills.AddUtilitySkills(bodyPrefab, new SkillDef[] { whirlwindAttackSkillDef, staggeringBlowSkillDef, brutalShotSkillDef });
             #endregion
 
             #region Special
-            SkillDef bombSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef hundredBladesSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = warriorPrefix + "SPECIAL_GREATSWORD_HUNDREDBLADES_NAME",
                 skillNameToken = warriorPrefix + "SPECIAL_GREATSWORD_HUNDREDBLADES_NAME",
@@ -200,7 +300,55 @@ namespace TyrianRain.Modules.Survivors
                 stockToConsume = 1
             });
 
-            Modules.Skills.AddSpecialSkills(bodyPrefab, bombSkillDef);
+            SkillDef backbreakerSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = warriorPrefix + "SPECIAL_HAMMER_BACKBREAKER_NAME",
+                skillNameToken = warriorPrefix + "SPECIAL_HAMMER_BACKBREAKER_NAME",
+                skillDescriptionToken = warriorPrefix + "SPECIAL_HAMMER_BACKBREAKER_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Hammer_Backbreaker"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
+                activationStateMachineName = "Slide",
+                baseMaxStock = 1,
+                baseRechargeInterval = 10f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = false,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+                resetCooldownTimerOnUse = false,
+                isCombatSkill = true,
+                mustKeyPress = false,
+                cancelSprintingOnActivation = true,
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1
+            });
+
+            SkillDef explosiveShellSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = warriorPrefix + "SPECIAL_RIFLE_EXPLOSIVESHELL_NAME",
+                skillNameToken = warriorPrefix + "SPECIAL_RIFLE_EXPLOSIVESHELL_NAME",
+                skillDescriptionToken = warriorPrefix + "SPECIAL_RIFLE_EXPLOSIVESHELL_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Rifle_ExplosiveShell"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
+                activationStateMachineName = "Slide",
+                baseMaxStock = 1,
+                baseRechargeInterval = 10f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = false,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+                resetCooldownTimerOnUse = false,
+                isCombatSkill = true,
+                mustKeyPress = false,
+                cancelSprintingOnActivation = true,
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1
+            });
+
+            Modules.Skills.AddSpecialSkills(bodyPrefab, new SkillDef[] { hundredBladesSkillDef, backbreakerSkillDef, explosiveShellSkillDef });
             #endregion
         }
 

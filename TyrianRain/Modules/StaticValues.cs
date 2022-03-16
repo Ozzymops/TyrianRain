@@ -16,6 +16,7 @@ namespace TyrianRain.Modules
 
         internal const float bombDamageCoefficient = 16f;
 
+        #region Warrior
         internal const float greatswordSwingDamageCoefficient = 1.5f;
         internal const float greatswordSliceDamageCoefficient = 2.0f;
         internal const float greatswordBrutalStrikeDamageCoefficient = 3.0f;
@@ -25,11 +26,31 @@ namespace TyrianRain.Modules
         internal const float greatswordHundredBladesFinishDamageCoefficient = 5.0f;
         internal const float greatswordArcingSliceDamageCoefficient = 12.5f;
 
+        internal const float hammerSwingDamageCoefficient = 1.0f;
+        internal const float hammerBashDamageCoefficient = 1.5f;
+        internal const float hammerSmashDamageCoefficient = 2.5f;
+        internal const float hammerFierceBlowDamageCoefficient = 3.0f;
+        internal const float hammerFierceBlowMultiplier = 1.0f;
+        internal const float hammerStaggeringBlowDamageCoefficient = 3.0f;
+        internal const float hammerBackbreakerDamageCoefficient = 4.0f;
+        internal const float hammerEarthshakerDamageCoefficient = 7.0f;
+
+        internal const float rifleFierceShotDamageCoefficient = 2.5f;
+        internal const float rifleVolleyDamageCoefficient = 2.5f;
+        internal const float rifleBrutalShotDamageCoefficient = 3.0f;
+        internal const float rifleExplosiveShellDamageCoefficient = 8.0f;
+        internal const float rifleKillShotLevel1DamageCoefficient = 10.0f;
+        internal const float rifleKillShotLevel2DamageCoefficient = 15.0f;
+        internal const float rifleKillShotLevel3DamageCoefficient = 20.0f;
+        #endregion
+
+        #region Necromancer
         internal const float scepterBloodCurseDamageCoefficient = 0.5f;
         internal const float scepterRendingCurseDamageCoefficient = 0.75f;
         internal const float scepterPutridCurseDamageCoefficient = 1.0f;
         internal const float scepterDeathlySwarmDamageCoefficient = 1.0f;
         internal const float scepterLifeSiphonDamageCoefficient = 0.5f;
         internal const float scepterFeastOfCorruptionDamageCoefficient = 2.0f;
+        #endregion
     }
 }

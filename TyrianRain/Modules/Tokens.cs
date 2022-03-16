@@ -35,7 +35,7 @@ namespace TyrianRain.Modules
 
             #region Greatsword
             LanguageAPI.Add(warriorPrefix + "PRIMARY_GREATSWORD_CHAIN_NAME", "Greatsword Chain");
-            LanguageAPI.Add(warriorPrefix + "PRIMARY_GREATSWORD_CHAIN_DESCRIPTION", $"<style=cIsUtility>Attack Chain</style>. Slash, Slice and Brutal Strike.");
+            LanguageAPI.Add(warriorPrefix + "PRIMARY_GREATSWORD_CHAIN_DESCRIPTION", $"<style=cIsUtility>Attack Chain</style>. Swing, Slice and Brutal Strike.");
 
             LanguageAPI.Add(warriorPrefix + "PRIMARY_GREATSWORD_SWING_NAME", "Swing");
             LanguageAPI.Add(warriorPrefix + "PRIMARY_GREATSWORD_SWING_DESCRIPTION", $"<style=cIsUtility>Attack Chain</style>. Slash your foe for <style=cIsDamage>{100f * StaticValues.greatswordSwingDamageCoefficient}% damage</style>. <style=cIsUtility>Chains into Slice</style>.");
@@ -57,6 +57,49 @@ namespace TyrianRain.Modules
 
             LanguageAPI.Add(warriorPrefix + "BURST_GREATSWORD_ARCINGSLICE_NAME", "Arcing Slice");
             LanguageAPI.Add(warriorPrefix + "BURST_GREATSWORD_ARCINGSLICE_DESCRIPTION", $"<style=cIsUtility>Burst Attack</style>. Deliver a circular attack to foes around you, dealing <style=cIsDamage>{100f * StaticValues.greatswordArcingSliceDamageCoefficient}% damage</style>, executing low-health foes. <style=cIsUtility>Gain Fury for 8/12/16 seconds</style>. <style=cIsUtility>Gain 3/6/9 stacks of Might for 10 seconds</style>.");
+            #endregion
+
+            #region Hammer
+            LanguageAPI.Add(warriorPrefix + "PRIMARY_HAMMER_CHAIN_NAME", "Hammer Chain");
+            LanguageAPI.Add(warriorPrefix + "PRIMARY_HAMMER_CHAIN_DESCRIPTION", $"<style=cIsUtility>Attack Chain</style>. Swing, Bash and Smash.");
+
+            LanguageAPI.Add(warriorPrefix + "PRIMARY_HAMMER_SWING_NAME", "Swing");
+            LanguageAPI.Add(warriorPrefix + "PRIMARY_HAMMER_SWING_DESCRIPTION", $"<style=cIsUtility>Attack Chain</style>. Bash your foe for <style=cIsDamage>{100f * StaticValues.hammerSwingDamageCoefficient}% damage</style>. <style=cIsUtility>Chains into Bash</style>.");
+
+            LanguageAPI.Add(warriorPrefix + "PRIMARY_HAMMER_BASH_NAME", "Bash");
+            LanguageAPI.Add(warriorPrefix + "PRIMARY_HAMMER_BASH_DESCRIPTION", $"<style=cIsUtility>Attack Chain</style>. Bash your foe again for <style=cIsDamage>{100f * StaticValues.hammerBashDamageCoefficient}% damage</style>. <style=cIsUtility>Chains into Smash</style>.");
+
+            LanguageAPI.Add(warriorPrefix + "PRIMARY_HAMMER_SMASH_NAME", "Smash");
+            LanguageAPI.Add(warriorPrefix + "PRIMARY_HAMMER_SMASH_DESCRIPTION", $"<style=cIsUtility>Attack Chain Ender</style>. Smash the ground and damage nearby foes for <style=cIsDamage>{100f * StaticValues.hammerSmashDamageCoefficient}% damage</style>. <style=cIsUtility>Gain one Strike of Adrenaline</style>. <style=cIsUtility>Resets Attack Chain</style>.");
+
+            LanguageAPI.Add(warriorPrefix + "SECONDARY_HAMMER_FIERCEBLOW_NAME", "Fierce Blow");
+            LanguageAPI.Add(warriorPrefix + "SECONDARY_HAMMER_FIERCEBLOW_DESCRIPTION", $"<style=cIsUtility>Weaken</style> your foe with a fierce blow, dealing <style=cIsDamage>{100f * StaticValues.hammerFierceBlowDamageCoefficient}% damage</style>. <style=cIsDamage>Deal {100f * StaticValues.hammerFierceBlowMultiplier}% increased damaged to</style> <style=cIsUtility>controlled</style> <style=cIsDamage>targets</style>. <style=cIsUtility>Gain one Strike of Adrenaline</style>.");
+
+            LanguageAPI.Add(warriorPrefix + "UTILITY_HAMMER_STAGGERINGBLOW_NAME", "Staggering Blow");
+            LanguageAPI.Add(warriorPrefix + "UTILITY_HAMMER_STAGGERINGBLOW_DESCRIPTION", $"<style=cIsUtility>Push back</style> and <style=cIsUtility>stun</style> nearby foes with a staggering blow, dealing <style=cIsDamage>{100f * StaticValues.hammerStaggeringBlowDamageCoefficient}% damage</style>. <style=cIsUtility>Gain two Strikes of Adrenaline</style>.");
+
+            LanguageAPI.Add(warriorPrefix + "SPECIAL_HAMMER_BACKBREAKER_NAME", "Backbreaker");
+            LanguageAPI.Add(warriorPrefix + "SPECIAL_HAMMER_BACKBREAKER_DESCRIPTION", $"<style=cIsUtility>Stun</style> your foe for a long time, dealing <style=cIsDamage>{100f * StaticValues.hammerBackbreakerDamageCoefficient}% damage</style>. <style=cIsUtility>Weakened</style> foes are <style=cIsUtility>stunned</style> for longer. <style=cIsUtility>Recharges Fierce Blow on hit</style>. <style=cIsUtility>Gain three Strikes of Adrenaline</style>.");
+
+            LanguageAPI.Add(warriorPrefix + "BURST_HAMMER_EARTHSHAKER_NAME", "Earthshaker");
+            LanguageAPI.Add(warriorPrefix + "BURST_HAMMER_EARTHSHAKER_DESCRIPTION", $"<style=cIsUtility>Burst Attack</style>. <style=cIsUtility>Leap forward</style> and slam your hammer down, dealing <style=cIsDamage>{100f * StaticValues.hammerEarthshakerDamageCoefficient}% damage</style> and <style=cIsUtility>stunning</style> nearby foes. <style=cIsUtility>You gain 100 Armor during your leap</style>. <style=cIsUtility>Gain 3/6/9 stacks of Might for 10 seconds</style>.");
+            #endregion
+
+            #region Rifle
+            LanguageAPI.Add(warriorPrefix + "PRIMARY_RIFLE_FIERCESHOT_NAME", "Fierce Shot");
+            LanguageAPI.Add(warriorPrefix + "PRIMARY_RIFLE_FIERCESHOT_DESCRIPTION", $"Fire a shot at your target, dealing <style=cIsDamage>{100f * StaticValues.rifleFierceShotDamageCoefficient}% damage</style>. Gain one stack of <style=cIsUtility>Might</style> for 10 seconds and one <style=cIsUtility>Strike of Adrenaline</style> on hitting a <style=cIsUtility>Vulnerable</style> target, stripping one stack of <style=cIsUtility>Vulnerability</style>.");
+
+            LanguageAPI.Add(warriorPrefix + "SECONDARY_RIFLE_VOLLEY_NAME", "Volley");
+            LanguageAPI.Add(warriorPrefix + "SECONDARY_RIFLE_VOLLEY_DESCRIPTION", $"Fire a volley of shots at your target, dealing <style=cIsDamage>6x{100f * StaticValues.rifleVolleyDamageCoefficient}% damage</style>. <style=cIsUtility>Inflict one stack of Vulnerability per shot</style>. <style=cIsUtility>Gain one Strike of Adrenaline</style>.");
+
+            LanguageAPI.Add(warriorPrefix + "UTILITY_RIFLE_BRUTALSHOT_NAME", "Brutal Shot");
+            LanguageAPI.Add(warriorPrefix + "UTILITY_RIFLE_BRUTALSHOT_DESCRIPTION", $"<style=cIsUtility>Leap backward</style> while shooting your target, dealing <style=cIsDamage>{100f * StaticValues.rifleBrutalShotDamageCoefficient}% damage</style> and <style=cIsUtility>immobilizing</style> them for a short period. <style=cIsUtility>You are invulnerable during this skill</style>. <style=cIsUtility>Gain two Strikes of Adrenaline</style>.");
+
+            LanguageAPI.Add(warriorPrefix + "SPECIAL_RIFLE_EXPLOSIVESHELL_NAME", "Explosive Shell");
+            LanguageAPI.Add(warriorPrefix + "SPECIAL_RIFLE_EXPLOSIVESHELL_DESCRIPTION", $"Shoot an explosive round that explodes when it hits, dealing <style=cIsDamage>{100f * StaticValues.rifleExplosiveShellDamageCoefficient}% damage</style> in a small area. <style=cIsUtility>Inflict ten stacks of Vulnerability</style>. <style=cIsUtility>Gain three Strikes of Adrenaline</style>.");
+
+            LanguageAPI.Add(warriorPrefix + "BURST_RIFLE_KILLSHOT_NAME", "Kill Shot");
+            LanguageAPI.Add(warriorPrefix + "BURST_RIFLE_KILLSHOT_DESCRIPTION", $"<style=cIsUtility>Burst Attack</style>. Fire a powerful shot for <style=cIsDamage>{100f * StaticValues.rifleKillShotLevel1DamageCoefficient}%/{100f * StaticValues.rifleKillShotLevel2DamageCoefficient}%/{100f * StaticValues.rifleKillShotLevel3DamageCoefficient}% damage</style>. <style=cIsUtility>Gain 3/6/9 stacks of Might for 10 seconds</style>.");
             #endregion
 
             #region Achievements
