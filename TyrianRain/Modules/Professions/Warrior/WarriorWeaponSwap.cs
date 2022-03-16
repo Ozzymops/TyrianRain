@@ -8,13 +8,28 @@ namespace TyrianRain.Modules.Professions.Warrior
 {
     enum WarriorWeapons { Greatsword, Hammer, DualAxe, MaceShield, SwordTorch, DualDagger, Longbow, Rifle }
 
-    public class WarriorWeaponSwap
+    public class WarriorWeaponSwap : MonoBehaviour
     {
+        #region Skill definitions
+        public static RoR2.Skills.SkillDef[] WarriorGreatsword = {
+            Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Warrior.GreatswordSwing)), "Weapon", Survivors.Warrior.warriorPrefix + "PRIMARY_GREATSWORD_SWING_NAME", Survivors.Warrior.warriorPrefix + "PRIMARY_GREATSWORD_SWING_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Greatsword_Swing"), true),
+            Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Warrior.GreatswordSlice)), "Weapon", Survivors.Warrior.warriorPrefix + "PRIMARY_GREATSWORD_SLICE_NAME", Survivors.Warrior.warriorPrefix + "PRIMARY_GREATSWORD_SLICE_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Greatsword_Slice"), true),
+            Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Warrior.GreatswordBrutalStrike)), "Weapon", Survivors.Warrior.warriorPrefix + "PRIMARY_GREATSWORD_BRUTALSTRIKE_NAME", Survivors.Warrior.warriorPrefix + "PRIMARY_GREATSWORD_BRUTALSTRIKE_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Greatsword_BrutalStrike"), true),
+        };
+        #endregion
+
         private CharacterBody warriorCharacterBody;
-        private WarriorAdrenaline adrenalineScript;
 
         private WarriorWeapons weaponLoadout;
         private int equippedWeapon = 0;
+        private int adrenaline = 0;
+        private int maxAdrenaline = 30;
+        private int adrenalineThreshold = 10;
+
+        private void Awake()
+        {
+            this.gameObject.GetComponent<WarriorAdrenaline>().OnAdrenalineUpdated += UpdateAdrenaline;
+        }
 
         private void Update()
         {
@@ -67,15 +82,21 @@ namespace TyrianRain.Modules.Professions.Warrior
         // perform burst attack
         public void ExecuteBurst()
         {
-            int[] adrenalineData = adrenalineScript.GetAdrenalineData();
-
-            if (adrenalineData[0] >= adrenalineData[2])
+            if (adrenaline >= adrenalineThreshold)
             {
                 // get adrenaline level
-                int adrenalineLevel = Mathf.FloorToInt(adrenalineData[0] % adrenalineData[2]);
-                
+                int adrenalineLevel = Mathf.FloorToInt(adrenaline % adrenalineThreshold);
+
                 // execute skill code
+                gameObject.GetComponent<Modules.Professions.Warrior.WarriorAdrenaline>().DrainAdrenaline();
             }
+        }
+
+        public void UpdateAdrenaline(int newAdrenaline, int newMaxAdrenaline, int newAdrenalineThreshold)
+        {
+            adrenaline = newAdrenaline;
+            maxAdrenaline = newMaxAdrenaline;
+            adrenalineThreshold = newAdrenalineThreshold;
         }
     }
 }

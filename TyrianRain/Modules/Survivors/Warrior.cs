@@ -9,7 +9,8 @@ namespace TyrianRain.Modules.Survivors
 {
     internal class Warrior : SurvivorBase
     {
-        string warriorPrefix = TyrianRain.developerPrefix + "_WARRIOR_BODY_";
+        public static string warriorPrefix = TyrianRain.developerPrefix + "_WARRIOR_BODY_";
+
         internal override string bodyName { get; set; } = "Warrior";
 
         internal override GameObject bodyPrefab { get; set; }
@@ -69,6 +70,16 @@ namespace TyrianRain.Modules.Survivors
         internal override void InitializeCharacter()
         {
             base.InitializeCharacter();
+            InitializeCustomScripts();
+        }
+
+        internal void InitializeCustomScripts()
+        {
+            bodyPrefab.AddComponent<Modules.Professions.Warrior.WarriorHUD>();
+            bodyPrefab.AddComponent<Modules.Professions.Warrior.WarriorAdrenaline>();
+            bodyPrefab.GetComponent<Modules.Professions.Warrior.WarriorAdrenaline>().DrainAdrenaline();
+            bodyPrefab.AddComponent<Modules.Professions.Warrior.WarriorWeaponSwap>();
+            bodyPrefab.AddComponent<Modules.Professions.AttackChain>();
         }
 
         internal override void InitializeUnlockables()
@@ -94,8 +105,6 @@ namespace TyrianRain.Modules.Survivors
         {
             Modules.Skills.CreateSkillFamilies(bodyPrefab);
 
-            string prefix = TyrianRain.developerPrefix;
-
             #region Passive
             Modules.Skills.AddPassiveSkill(bodyPrefab, new SkillFamily.Variant[]
             {
@@ -106,7 +115,7 @@ namespace TyrianRain.Modules.Survivors
             #endregion
 
             #region Primary
-            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)), "Weapon", warriorPrefix + "PRIMARY_GREATSWORD_CHAIN_NAME", warriorPrefix + "PRIMARY_GREATSWORD_CHAIN_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Weapon_Greatsword"), true));
+            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Warrior.GreatswordSwing)), "Weapon", warriorPrefix + "PRIMARY_GREATSWORD_CHAIN_NAME", warriorPrefix + "PRIMARY_GREATSWORD_CHAIN_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Weapon_Greatsword"), true));
             #endregion
 
             #region Secondary

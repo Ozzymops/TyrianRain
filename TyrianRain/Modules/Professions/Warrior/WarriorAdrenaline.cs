@@ -6,7 +6,7 @@ using RoR2;
 
 namespace TyrianRain.Modules.Professions.Warrior
 {
-    public class WarriorAdrenaline
+    public class WarriorAdrenaline : MonoBehaviour
     {
         private CharacterBody warriorCharacterBody;
 
@@ -15,6 +15,11 @@ namespace TyrianRain.Modules.Professions.Warrior
         private int adrenalineThreshold = 10;
         private float warriorDamageDealtCounter = 0;
         private float warriorDamageTakenCounter = 0;
+
+        private void Awake()
+        {
+            DrainAdrenaline();
+        }
 
         // 1000% of damage dealth = 1 adrenaline
         public void UpdateWarriorDamageDealtCounter(float damageDealt)
@@ -46,6 +51,11 @@ namespace TyrianRain.Modules.Professions.Warrior
             if (adrenaline < maxAdrenaline)
             {
                 adrenaline += addedAdrenaline;
+
+                if (OnAdrenalineUpdated != null)
+                {
+                    OnAdrenalineUpdated(adrenaline, maxAdrenaline, adrenalineThreshold);
+                }
             }
         }
 
@@ -53,12 +63,15 @@ namespace TyrianRain.Modules.Professions.Warrior
         public void DrainAdrenaline()
         {
             adrenaline = 0;
+
+            if (OnAdrenalineUpdated != null)
+            {
+                OnAdrenalineUpdated(adrenaline, maxAdrenaline, adrenalineThreshold);
+            }
         }
 
-        // return adrenaline data
-        public int[] GetAdrenalineData()
-        {
-            return new int[] { adrenaline, maxAdrenaline, adrenalineThreshold };
-        }
+        // event stuff
+        public delegate void OnAdrenalineUpdatedDelegate(int adrenaline, int maxAdrenaline, int adrenalineThreshold);
+        public event OnAdrenalineUpdatedDelegate OnAdrenalineUpdated;
     }
 }
