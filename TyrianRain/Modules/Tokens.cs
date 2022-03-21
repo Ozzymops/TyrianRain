@@ -33,6 +33,17 @@ namespace TyrianRain.Modules
             LanguageAPI.Add(warriorPrefix + "PASSIVE_BERSERKER_DESCRIPTION", "Gain and spend Strikes of Adrenaline to enter Berserk Mode, gaining buffs and access to Primal Burst Attacks with a reduced cost. Swap between two weapons at will, selecting the same weapon will enter Berserk Mode or execute a Primal Burst Attack.");
             #endregion
 
+            #region Weapon Select
+            LanguageAPI.Add(warriorPrefix + "WEAPONSELECT_GREATSWORD_NAME", "Greatsword");
+            LanguageAPI.Add(warriorPrefix + "WEAPONSELECT_GREATSWORD_DESCRIPTION", $"A versatile weapon. Execute your foes with Burst Attack <style=cIsUtility>Arcing Slice</style>. Cripple stragglers with <style=cIsUtility>Bladetrail</style> and chase after them with <style=cIsUtility>Whirlwind Attack</style>. Decimate groups of foes with <style=cIsUtility>Hundred Blades</style>.");
+
+            LanguageAPI.Add(warriorPrefix + "WEAPONSELECT_HAMMER_NAME", "Hammer");
+            LanguageAPI.Add(warriorPrefix + "WEAPONSELECT_HAMMER_DESCRIPTION", $"A weapon with a focus on crowd control. Immobilize entire swarms with Burst Attack <style=cIsUtility>Earthshaker</style>. Weaken your foes with <style=cIsUtility>Fierce Blow</style>, reducing their damage output. Control your foes with <style=cIsUtility>Staggering Blow</style> and <style=cIsUtility>Backbreaker</style>, making them vulnerable to other attacks.");
+
+            LanguageAPI.Add(warriorPrefix + "WEAPONSELECT_RIFLE_NAME", "Rifle");
+            LanguageAPI.Add(warriorPrefix + "WEAPONSELECT_RIFLE_DESCRIPTION", $"A ranged weapon with a focus on single-target damage. Finish your foes with Burst Attack <style=cIsUtility>Kill Shot</style>. Make your targets vulnerable with <style=cIsUtility>Volley</style>. Evade and retreat to a better position with <style=cIsUtility>Brutal Shot</style>. Destroy small-packed groups of foes with <style=cIsUtility>Explosive Shell</style>.");
+            #endregion
+
             #region Greatsword
             LanguageAPI.Add(warriorPrefix + "PRIMARY_GREATSWORD_CHAIN_NAME", "Greatsword Chain");
             LanguageAPI.Add(warriorPrefix + "PRIMARY_GREATSWORD_CHAIN_DESCRIPTION", $"<style=cIsUtility>Attack Chain</style>. Swing, Slice and Brutal Strike.");
