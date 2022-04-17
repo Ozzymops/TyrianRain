@@ -7,18 +7,15 @@ using R2API;
 
 namespace TyrianRain.Modules.Professions.Warrior
 {
-    enum WarriorWeapons { Greatsword, Hammer, DualAxe, MaceShield, SwordTorch, DualDagger, Longbow, Rifle }
-
-    public class WeaponReturn
-    {
-        public RoR2.Skills.SkillDef[] skillDefs { get; set; }
-        public bool chains { get; set; }
-    }
-
     public class WarriorWeaponSwap : MonoBehaviour
     {
-        #region Skill definitions
-        public static RoR2.Skills.SkillDef[] WarriorGreatsword = {
+        private enum WarriorWeapons { Greatsword, Hammer, Rifle, Longbow, DualAxe, DualDagger, MaceShield, SwordTorch };
+        private WarriorWeapons[] equippedWeapons = { WarriorWeapons.Greatsword, WarriorWeapons.Hammer, WarriorWeapons.Rifle };
+
+        #region SkillDefs
+        // Greatsword
+        public static RoR2.Skills.SkillDef[] WarriorGreatsword =
+        {
             // primary
             Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Warrior.GreatswordSwing)), "Weapon", Survivors.Warrior.warriorPrefix + "PRIMARY_GREATSWORD_SWING_NAME", Survivors.Warrior.warriorPrefix + "PRIMARY_GREATSWORD_SWING_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Greatsword_Swing"), true),
             Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Warrior.GreatswordSlice)), "Weapon", Survivors.Warrior.warriorPrefix + "PRIMARY_GREATSWORD_SLICE_NAME", Survivors.Warrior.warriorPrefix + "PRIMARY_GREATSWORD_SLICE_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Greatsword_Slice"), true),
@@ -122,6 +119,7 @@ namespace TyrianRain.Modules.Professions.Warrior
             }))
         };
 
+        // Hammer
         public static RoR2.Skills.SkillDef[] WarriorHammer = {
             // primary
             Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Warrior.HammerSwing)), "Weapon", Survivors.Warrior.warriorPrefix + "PRIMARY_HAMMER_SWING_NAME", Survivors.Warrior.warriorPrefix + "PRIMARY_HAMMER_SWING_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Hammer_Swing"), true),
@@ -226,6 +224,7 @@ namespace TyrianRain.Modules.Professions.Warrior
             }))
         };
 
+        // Rifle
         public static RoR2.Skills.SkillDef[] WarriorRifle = {
             // primary
             Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Warrior.RifleFierceShot)), "Weapon", Survivors.Warrior.warriorPrefix + "PRIMARY_RIFLE_FIERCESHOT_NAME", Survivors.Warrior.warriorPrefix + "PRIMARY_RIFLE_FIERCESHOT_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("Icon_Attack_Rifle_FierceShot"), true),
@@ -329,91 +328,75 @@ namespace TyrianRain.Modules.Professions.Warrior
         };
         #endregion
 
-        private CharacterBody warriorCharacterBody;
+        private int currentWeaponIndex = 0;
 
-        private WarriorWeapons[] weaponLoadout = new WarriorWeapons[3];
-        private RoR2.Skills.SkillDef burstAttack;
-
-        private int equippedWeapon = 0;
-        private int adrenaline = 0;
-        private int maxAdrenaline = 30;
-        private int adrenalineThreshold = 10;
-
-        private void Awake()
-        {
-            warriorCharacterBody = this.GetComponent<CharacterBody>();
-            this.GetComponent<WarriorAdrenaline>().OnAdrenalineUpdated += UpdateAdrenaline;
-
-            // testing
-            weaponLoadout = new WarriorWeapons[] { WarriorWeapons.Greatsword, WarriorWeapons.Hammer, WarriorWeapons.Rifle };
-        }
-
+        private float weaponSwapCooldown = 5.0f; // will eventually be 10.0f, changed by trait
+        private float weaponSwapCooldownTimer;
+        
         private void Update()
         {
-            // input
-            if (Input.GetKeyDown(KeyCode.Alpha1)) // 1
-            {
-                if (equippedWeapon == 0)
-                {
-                    ExecuteBurst();
-                }
-                else
-                {
-                    SwapWeapon(0);
-                }               
-            }
+            Controls();
 
-            if (Input.GetKeyDown(KeyCode.Alpha2)) // 2
+            if (weaponSwapCooldown > 0.0f)
             {
-                if (equippedWeapon == 1)
-                {
-                    ExecuteBurst();
-                }
-                else
-                {
-                    SwapWeapon(1);
-                }
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha3)) // 3
-            {
-                if (equippedWeapon == 2)
-                {
-                    ExecuteBurst();
-                }
-                else
-                {
-                    SwapWeapon(2);
-                }
+                weaponSwapCooldownTimer -= 1.0f * Time.deltaTime;
             }
         }
 
-        // swap weapon index
-        public void SwapWeapon(int weapon)
+        /// <summary>
+        /// Handles input
+        /// </summary>
+        private void Controls()
         {
-            equippedWeapon = weapon;
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                WeaponSwap(0);
+            }
 
-            RoR2.SkillLocator skillLocator = warriorCharacterBody.skillLocator;
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                WeaponSwap(1);
+            }
 
-            switch (weaponLoadout[equippedWeapon])
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                WeaponSwap(2);
+            }
+        }
+
+        /// <summary>
+        /// Swap weapon loadout to selected weapon
+        /// </summary>
+        /// <param name="index">Selected weapon index</param>
+        private void WeaponSwap(int index)
+        {
+            if (weaponSwapCooldownTimer > 0.0f) return;
+            if (currentWeaponIndex == index) return;
+
+            currentWeaponIndex = index;
+
+            // swap skills
+            RoR2.SkillLocator skillLocator = GetComponent<CharacterBody>().skillLocator;
+
+            switch (equippedWeapons[currentWeaponIndex])
             {
                 case WarriorWeapons.Greatsword:
-                    warriorCharacterBody.GetComponent<AttackChain>().SetChainSkills(WarriorGreatsword, true);
-                    
+                    OnLoadoutChange?.Invoke(WarriorGreatsword, true);
+
                     skillLocator.secondary.UnsetSkillOverride(skillLocator.secondary, skillLocator.secondary.skillDef, GenericSkill.SkillOverridePriority.Default);
                     skillLocator.secondary.SetSkillOverride(skillLocator.secondary, WarriorGreatsword[3], GenericSkill.SkillOverridePriority.Default);
-                    
+
                     skillLocator.utility.UnsetSkillOverride(skillLocator.utility, skillLocator.utility.skillDef, GenericSkill.SkillOverridePriority.Default);
                     skillLocator.utility.SetSkillOverride(skillLocator.utility, WarriorGreatsword[4], GenericSkill.SkillOverridePriority.Default);
-                    
+
                     skillLocator.special.UnsetSkillOverride(skillLocator.special, skillLocator.special.skillDef, GenericSkill.SkillOverridePriority.Default);
                     skillLocator.special.SetSkillOverride(skillLocator.special, WarriorGreatsword[5], GenericSkill.SkillOverridePriority.Default);
-                    
-                    burstAttack = WarriorGreatsword[6];
+
+                    OnBurstAttackChange?.Invoke(WarriorGreatsword[6]);
                     break;
 
                 case WarriorWeapons.Hammer:
-                    warriorCharacterBody.GetComponent<AttackChain>().SetChainSkills(WarriorHammer, true);
+                    OnLoadoutChange?.Invoke(WarriorHammer, true);
 
                     skillLocator.secondary.UnsetSkillOverride(skillLocator.secondary, skillLocator.secondary.skillDef, GenericSkill.SkillOverridePriority.Default);
                     skillLocator.secondary.SetSkillOverride(skillLocator.secondary, WarriorHammer[3], GenericSkill.SkillOverridePriority.Default);
@@ -424,11 +407,11 @@ namespace TyrianRain.Modules.Professions.Warrior
                     skillLocator.special.UnsetSkillOverride(skillLocator.special, skillLocator.special.skillDef, GenericSkill.SkillOverridePriority.Default);
                     skillLocator.special.SetSkillOverride(skillLocator.special, WarriorHammer[5], GenericSkill.SkillOverridePriority.Default);
 
-                    burstAttack = WarriorHammer[6];
+                    OnBurstAttackChange?.Invoke(WarriorHammer[6]);
                     break;
 
                 case WarriorWeapons.Rifle:
-                    warriorCharacterBody.GetComponent<AttackChain>().SetChainSkills(WarriorRifle, false);
+                    OnLoadoutChange?.Invoke(WarriorRifle, false);
 
                     skillLocator.secondary.UnsetSkillOverride(skillLocator.secondary, skillLocator.secondary.skillDef, GenericSkill.SkillOverridePriority.Default);
                     skillLocator.secondary.SetSkillOverride(skillLocator.secondary, WarriorRifle[1], GenericSkill.SkillOverridePriority.Default);
@@ -439,52 +422,21 @@ namespace TyrianRain.Modules.Professions.Warrior
                     skillLocator.special.UnsetSkillOverride(skillLocator.special, skillLocator.special.skillDef, GenericSkill.SkillOverridePriority.Default);
                     skillLocator.special.SetSkillOverride(skillLocator.special, WarriorRifle[3], GenericSkill.SkillOverridePriority.Default);
 
-                    burstAttack = WarriorRifle[4];
+                    OnBurstAttackChange?.Invoke(WarriorRifle[4]);
                     break;
 
                 default:
-                    Debug.Log("Which is... shitty code");
                     break;
-            }                     
-        }
-
-        // perform burst attack
-        public void ExecuteBurst()
-        {
-            if (adrenaline >= adrenalineThreshold)
-            {
-                // get adrenaline level
-                int adrenalineLevel = Mathf.FloorToInt(adrenaline % adrenalineThreshold);
-
-                // execute skill code
-                gameObject.GetComponent<Modules.Professions.Warrior.WarriorAdrenaline>().DrainAdrenaline();
-                // do skilldef
             }
+
+            // cooldown timer
+            weaponSwapCooldownTimer = weaponSwapCooldown;
+            OnWeaponSwap?.Invoke(currentWeaponIndex, weaponSwapCooldown);
         }
 
-        public void UpdateAdrenaline(int newAdrenaline, int newMaxAdrenaline, int newAdrenalineThreshold)
-        {
-            adrenaline = newAdrenaline;
-            maxAdrenaline = newMaxAdrenaline;
-            adrenalineThreshold = newAdrenalineThreshold;
-        }
-
-        public WeaponReturn GetWeapon()
-        {
-            switch (weaponLoadout[equippedWeapon])
-            {
-                case WarriorWeapons.Greatsword:
-                    return new WeaponReturn() { skillDefs = WarriorGreatsword, chains = true };
-
-                case WarriorWeapons.Hammer:
-                    return new WeaponReturn() { skillDefs = WarriorHammer, chains = true };
-
-                case WarriorWeapons.Rifle:
-                    return new WeaponReturn() { skillDefs = WarriorRifle, chains = false };
-
-                default:
-                    return null;
-            }
-        }
+        // Events
+        public static event Action<int, float> OnWeaponSwap;
+        public static event Action<RoR2.Skills.SkillDef[], bool> OnLoadoutChange;
+        public static event Action<RoR2.Skills.SkillDef> OnBurstAttackChange;
     }
 }

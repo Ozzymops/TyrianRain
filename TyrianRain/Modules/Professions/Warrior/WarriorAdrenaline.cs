@@ -8,70 +8,94 @@ namespace TyrianRain.Modules.Professions.Warrior
 {
     public class WarriorAdrenaline : MonoBehaviour
     {
-        private CharacterBody warriorCharacterBody;
+        private enum WarriorEliteSpecialisation { Core, Berserker, Spellbreaker, Bladesworn };
+        private WarriorEliteSpecialisation eliteSpecialisation = WarriorEliteSpecialisation.Core;
 
-        private int adrenaline = 0;
-        private int maxAdrenaline = 30;
-        private int adrenalineThreshold = 10;
-        private float warriorDamageDealtCounter = 0;
-        private float warriorDamageTakenCounter = 0;
+        private RoR2.Skills.SkillDef _burstAttack;
+
+        private int adrenaline;
+        private int maximumAdrenaline;
+        private int adrenalineThreshold;
+
+        private void OnEnable()
+        {
+            WarriorWeaponSwap.OnBurstAttackChange += ChangeBurstAttack;
+        }
+
+        private void OnDisable()
+        {
+            WarriorWeaponSwap.OnBurstAttackChange -= ChangeBurstAttack;
+        }
 
         private void Awake()
         {
-            DrainAdrenaline();
+            // get elite specialisation from passive
+            SetupAdrenaline(30, 10);
+            SetAdrenaline(-999);
         }
 
-        // 1000% of damage dealth = 1 adrenaline
-        public void UpdateWarriorDamageDealtCounter(float damageDealt)
+        private void Update()
         {
-            warriorDamageDealtCounter += damageDealt;
+            Controls();
+        }
 
-            if (warriorDamageDealtCounter > 1000)
+        /// <summary>
+        /// Handles input
+        /// </summary>
+        private void Controls()
+        {
+            if (Input.GetKeyDown(KeyCode.E)) // or F, idk
             {
-                warriorDamageDealtCounter -= 1000;
-                UpdateAdrenaline(1);
+                // burst attack
             }
         }
 
-        // 30% of max. HP damage taken = 1 adrenaline
-        public void UpdateWarriorDamageTakenCounter(float damageTaken)
+        /// <summary>
+        /// Set maximum and threshold values
+        /// </summary>
+        /// <param name="maximumValue">Maximum adrenaline value</param>
+        /// <param name="thresholdValue">Threshold value for adrenaline levels</param>
+        private void SetupAdrenaline(int maximumValue, int thresholdValue)
         {
-            warriorDamageTakenCounter += damageTaken;
+            maximumAdrenaline = maximumValue;
+            adrenalineThreshold = thresholdValue;
 
-            if (warriorDamageTakenCounter > (warriorCharacterBody.maxHealth * 0.3f))
-            {
-                warriorDamageTakenCounter -= (warriorCharacterBody.maxHealth * 0.3f);
-                UpdateAdrenaline(1);
-            }
+            OnAdrenalineSetup?.Invoke(maximumAdrenaline, adrenalineThreshold);
         }
 
-        // adrenaline sanity check
-        public void UpdateAdrenaline(int addedAdrenaline)
+        /// <summary>
+        /// Set value to add or subtract from adrenaline
+        /// </summary>
+        /// <param name="value">Value to add or subtract</param>
+        public void SetAdrenaline(int value)
         {
-            if (adrenaline < maxAdrenaline)
+            if (adrenaline + value > maximumAdrenaline)
             {
-                adrenaline += addedAdrenaline;
-
-                if (OnAdrenalineUpdated != null)
-                {
-                    OnAdrenalineUpdated(adrenaline, maxAdrenaline, adrenalineThreshold);
-                }
+                adrenaline = maximumAdrenaline;
             }
+            else if (adrenaline - value < 0)
+            {
+                adrenaline = 0;
+            }
+            else
+            {
+                adrenaline += value;
+            }
+
+            OnAdrenalineChanged?.Invoke(adrenaline);
         }
 
-        // reset adrenaline after burst
-        public void DrainAdrenaline()
+        /// <summary>
+        /// Change current Burst Attack to selected weapon's Burst Attack
+        /// </summary>
+        /// <param name="skillDef">Burst Attack</param>
+        private void ChangeBurstAttack(RoR2.Skills.SkillDef skillDef)
         {
-            adrenaline = 0;
-
-            if (OnAdrenalineUpdated != null)
-            {
-                OnAdrenalineUpdated(adrenaline, maxAdrenaline, adrenalineThreshold);
-            }
+            _burstAttack = skillDef;
         }
 
-        // event stuff
-        public delegate void OnAdrenalineUpdatedDelegate(int adrenaline, int maxAdrenaline, int adrenalineThreshold);
-        public event OnAdrenalineUpdatedDelegate OnAdrenalineUpdated;
+        // Events
+        public static event Action<int, int> OnAdrenalineSetup;
+        public static event Action<int> OnAdrenalineChanged;
     }
 }

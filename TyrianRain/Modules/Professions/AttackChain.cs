@@ -9,88 +9,134 @@ namespace TyrianRain.Modules.Professions
 {
     public class AttackChain : MonoBehaviour
     {
-        private SkillLocator skillLocator;
         private RoR2.Skills.SkillDef[] chainSkills;
-        private bool canChain = true;
-        private int currentSkill = 0;
-        private float timer = 0.0f;
 
-        public void Awake()
+        private int skillIndex = 0;
+        private bool weaponSwap = false;
+        private bool loadoutCanChain;
+        private float resetTimer = 0.0f;
+
+        private void Awake()
         {
-            skillLocator = this.GetComponent<CharacterBody>().skillLocator;
+            // Warrior Weapon Swap check
+            if (GetComponent<Professions.Warrior.WarriorWeaponSwap>())
+            {
+                weaponSwap = true;
+            }
+        }
 
-            Professions.Warrior.WeaponReturn returnedWeapon = this.GetComponent<Warrior.WarriorWeaponSwap>().GetWeapon();
-            SetChainSkills(returnedWeapon.skillDefs, returnedWeapon.chains);
+        private void OnEnable()
+        {
+            if (weaponSwap)
+            {
+                Professions.Warrior.WarriorWeaponSwap.OnLoadoutChange += SetChainSkills;
+            }          
+        }
+
+        private void OnDisable()
+        {
+            if (weaponSwap)
+            {
+                Professions.Warrior.WarriorWeaponSwap.OnLoadoutChange -= SetChainSkills;
+            }
         }
 
         private void Update()
         {
-            // heresy check?
-
-            // change primary based on chain state
-            if (canChain)
+            if (resetTimer > 0.0f)
             {
-                if (skillLocator && chainSkills.Length != 0)
-                {
-                    if (skillLocator.primary.skillDef != chainSkills[currentSkill])
-                    {
-                        skillLocator.primary.UnsetSkillOverride(skillLocator.primary, skillLocator.primary.skillDef, GenericSkill.SkillOverridePriority.Default);
-                        skillLocator.primary.SetSkillOverride(skillLocator.primary, chainSkills[currentSkill], GenericSkill.SkillOverridePriority.Default);
-                    }
-                }
+                resetTimer -= 1.0f * Time.deltaTime;
 
-                // chain reset timer
-                if (currentSkill != 0)
+                if (resetTimer < 0.0f)
                 {
-                    timer -= 1.0f * Time.deltaTime;
-
-                    if (timer <= 0.0f)
-                    {
-                        ResetChain();
-                    }
+                    SetChain(-999);
                 }
-            }  
+            }
+        }
+
+        /// <summary>
+        /// Add 1 to chain progression
+        /// </summary>
+        public void IncrementChain()
+        {
+            SetChain(1);
+        }
+
+        /// <summary>
+        /// Set value to add or subtract from chain progression
+        /// </summary>
+        /// <param name="value">Chain progression</param>
+        private void SetChain(int value)
+        {
+            if (skillIndex + value > 2)
+            {
+                skillIndex = 0;
+                resetTimer = 0.0f;
+            }
+            else if (skillIndex - value < 0)
+            {
+                skillIndex = 0;
+                resetTimer = 0.0f;
+            }
             else
+            {
+                skillIndex += value;
+                resetTimer = 3.0f;
+            }
+        }
+
+        /// <summary>
+        /// Change primary skill loadout
+        /// </summary>
+        /// <param name="skillDefs">New loadout</param>
+        /// <param name="chain">Can this loadout chain?</param>
+        public void SetChainSkills(RoR2.Skills.SkillDef[] skillDefs, bool chain)
+        {
+            SetChain(-999);
+
+            loadoutCanChain = chain;
+
+            if (!loadoutCanChain)
+            {
+                chainSkills = new RoR2.Skills.SkillDef[] { skillDefs[0] };
+                return;
+            }
+
+            chainSkills = skillDefs;       
+        }
+
+        /// <summary>
+        /// Change primary skill based on chain progression
+        /// </summary>
+        private void UpdatePrimarySkill()
+        {
+            SkillLocator skillLocator = GetComponent<CharacterBody>().skillLocator;
+
+            if (!loadoutCanChain)
             {
                 if (skillLocator.primary.skillDef != chainSkills[0])
                 {
                     skillLocator.primary.UnsetSkillOverride(skillLocator.primary, skillLocator.primary.skillDef, GenericSkill.SkillOverridePriority.Default);
                     skillLocator.primary.SetSkillOverride(skillLocator.primary, chainSkills[0], GenericSkill.SkillOverridePriority.Default);
                 }
+
+                return;
             }
-        }
 
-        public void IncrementChain()
-        {
-            currentSkill++;
-            timer = 3.0f;     
-        }
-
-        public void ResetChain()
-        {
-            currentSkill = 0;
-            timer = 3.0f;
-        }
-
-        public void SetChainSkills(RoR2.Skills.SkillDef[] skillDefs, bool chain)
-        {
-            if (chain)
+            if (skillLocator.primary.skillDef != chainSkills[skillIndex])
             {
-                chainSkills = skillDefs;
-                Debug.Log("Set primary chain skills to " + chainSkills[0].name + ", " + chainSkills[1].name + " & " + chainSkills[2].name);
+                skillLocator.primary.UnsetSkillOverride(skillLocator.primary, skillLocator.primary.skillDef, GenericSkill.SkillOverridePriority.Default);
+                skillLocator.primary.SetSkillOverride(skillLocator.primary, chainSkills[skillIndex], GenericSkill.SkillOverridePriority.Default);
             }
-            else
-            {
-                chainSkills = new RoR2.Skills.SkillDef[] { skillDefs[0] };
-                Debug.Log("Set primary skill to " + chainSkills[0].name);
-            }
-
-            ResetChain();
         }
 
-        public int GetCurrentSkillCount()
+        /// <summary>
+        /// Return chain progression
+        /// </summary>
+        /// <returns>Chain progression as int</returns>
+        public int GetChain()
         {
-            return currentSkill;
+            return skillIndex;
         }
     }
 }

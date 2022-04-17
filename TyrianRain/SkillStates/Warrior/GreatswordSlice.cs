@@ -9,7 +9,7 @@ namespace TyrianRain.SkillStates.Warrior
     {
         public override void OnEnter()
         {
-            this.hitboxName = "Sword";
+            this.hitboxName = "Forward";
 
             this.damageType = DamageType.Generic;
             this.damageCoefficient = Modules.StaticValues.greatswordSliceDamageCoefficient;
@@ -48,7 +48,7 @@ namespace TyrianRain.SkillStates.Warrior
         protected override void SetNextState()
         {
             // redundant, but kinda necessary for auto-attack stuff
-            switch (characterBody.GetComponent<Modules.Professions.AttackChain>().GetCurrentSkillCount())
+            switch (characterBody.GetComponent<Modules.Professions.AttackChain>().GetChain())
             {
                 case 0:
                     this.outer.SetNextState(new GreatswordSwing());

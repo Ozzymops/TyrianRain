@@ -9,7 +9,7 @@ namespace TyrianRain.SkillStates.Warrior
     {
         public override void OnEnter()
         {
-            this.hitboxName = "Sword";
+            this.hitboxName = "Surround";
 
             this.damageType = DamageType.Generic;
             this.damageCoefficient = Modules.StaticValues.hammerSmashDamageCoefficient;
@@ -48,18 +48,18 @@ namespace TyrianRain.SkillStates.Warrior
         protected override void SetNextState()
         {
             // redundant, but kinda necessary for auto-attack stuff
-            switch (characterBody.GetComponent<Modules.Professions.AttackChain>().GetCurrentSkillCount())
+            switch (characterBody.GetComponent<Modules.Professions.AttackChain>().GetChain())
             {
                 case 0:
-                    this.outer.SetNextState(new GreatswordSwing());
+                    this.outer.SetNextState(new HammerSwing());
                     break;
 
                 case 1:
-                    this.outer.SetNextState(new GreatswordSlice());
+                    this.outer.SetNextState(new HammerBash());
                     break;
 
                 case 2:
-                    this.outer.SetNextState(new GreatswordBrutalStrike());
+                    this.outer.SetNextState(new HammerSmash());
                     break;
             }
         }
@@ -70,8 +70,7 @@ namespace TyrianRain.SkillStates.Warrior
 
             if (NetworkServer.active)
             {
-                characterBody.GetComponent<Modules.Professions.AttackChain>().ResetChain();
-                characterBody.GetComponent<Modules.Professions.Warrior.WarriorAdrenaline>().UpdateAdrenaline(1);
+                characterBody.GetComponent<Modules.Professions.Warrior.WarriorAdrenaline>().SetAdrenaline(1);
             }
         }
 

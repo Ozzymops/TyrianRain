@@ -9,7 +9,7 @@ namespace TyrianRain.SkillStates.Warrior
     {
         public override void OnEnter()
         {
-            this.hitboxName = "Sword";
+            this.hitboxName = "Surround";
 
             this.damageType = DamageType.Generic;
             this.damageCoefficient = Modules.StaticValues.hammerEarthshakerDamageCoefficient;

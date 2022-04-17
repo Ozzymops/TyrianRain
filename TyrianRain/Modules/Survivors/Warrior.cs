@@ -44,17 +44,22 @@ namespace TyrianRain.Modules.Survivors
         internal override CustomRendererInfo[] customRendererInfos { get; set; } = new CustomRendererInfo[] {
                 new CustomRendererInfo
                 {
-                    childName = "SwordModel",
+                    childName = "Greatsword",
                     material = henryMat,
                 },
                 new CustomRendererInfo
                 {
-                    childName = "GunModel",
+                    childName = "Hammer",
                     material = henryMat,
                 },
                 new CustomRendererInfo
                 {
-                    childName = "Model",
+                    childName = "Rifle",
+                    material = henryMat,
+                },
+                new CustomRendererInfo
+                {
+                    childName = "Character",
                     material = henryMat
                 }};
 
@@ -75,10 +80,9 @@ namespace TyrianRain.Modules.Survivors
 
         internal void InitializeCustomScripts()
         {
-            bodyPrefab.AddComponent<Modules.Professions.Warrior.WarriorHUD>();
-            bodyPrefab.AddComponent<Modules.Professions.Warrior.WarriorAdrenaline>();
-            bodyPrefab.GetComponent<Modules.Professions.Warrior.WarriorAdrenaline>().DrainAdrenaline();
             bodyPrefab.AddComponent<Modules.Professions.Warrior.WarriorWeaponSwap>();
+            bodyPrefab.AddComponent<Modules.Professions.Warrior.WarriorAdrenaline>();
+            bodyPrefab.AddComponent<Modules.Professions.Warrior.WarriorHUD>();
             bodyPrefab.AddComponent<Modules.Professions.AttackChain>();
         }
 
@@ -97,8 +101,11 @@ namespace TyrianRain.Modules.Survivors
             ChildLocator childLocator = bodyPrefab.GetComponentInChildren<ChildLocator>();
             GameObject model = childLocator.gameObject;
 
-            Transform hitboxTransform = childLocator.FindChild("SwordHitbox");
-            Modules.Prefabs.SetupHitbox(model, hitboxTransform, "Sword");
+            Transform forwardHitbox = childLocator.FindChild("ForwardHitbox");
+            Transform surroundHitbox = childLocator.FindChild("SurroundHitbox");
+
+            Modules.Prefabs.SetupHitbox(model, forwardHitbox, "Forward");
+            Modules.Prefabs.SetupHitbox(model, surroundHitbox, "Surround");
         }
 
         internal override void InitializeSkills()
@@ -373,24 +380,26 @@ namespace TyrianRain.Modules.Survivors
                 mainRenderer,
                 model);
 
-            defaultSkin.meshReplacements = new SkinDef.MeshReplacement[]
-            {
-                new SkinDef.MeshReplacement
-                {
-                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenrySword"),
-                    renderer = defaultRenderers[0].renderer
-                },
-                new SkinDef.MeshReplacement
-                {
-                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenryGun"),
-                    renderer = defaultRenderers[1].renderer
-                },
-                new SkinDef.MeshReplacement
-                {
-                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenry"),
-                    renderer = defaultRenderers[instance.mainRendererIndex].renderer
-                }
-            };
+            defaultSkin.meshReplacements = null;
+
+            //defaultSkin.meshReplacements = new SkinDef.MeshReplacement[]
+            //{
+            //    new SkinDef.MeshReplacement
+            //    {
+            //        mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenrySword"),
+            //        renderer = defaultRenderers[0].renderer
+            //    },
+            //    new SkinDef.MeshReplacement
+            //    {
+            //        mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenryGun"),
+            //        renderer = defaultRenderers[1].renderer
+            //    },
+            //    new SkinDef.MeshReplacement
+            //    {
+            //        mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenry"),
+            //        renderer = defaultRenderers[instance.mainRendererIndex].renderer
+            //    }
+            //};
 
             skins.Add(defaultSkin);
             #endregion
@@ -412,19 +421,21 @@ namespace TyrianRain.Modules.Survivors
                 model,
                 warriorMasterySkinUnlockableDef);
 
-            masterySkin.meshReplacements = new SkinDef.MeshReplacement[]
-            {
-                new SkinDef.MeshReplacement
-                {
-                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenrySwordAlt"),
-                    renderer = defaultRenderers[0].renderer
-                },
-                new SkinDef.MeshReplacement
-                {
-                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenryAlt"),
-                    renderer = defaultRenderers[instance.mainRendererIndex].renderer
-                }
-            };
+            masterySkin.meshReplacements = null;
+
+            //masterySkin.meshReplacements = new SkinDef.MeshReplacement[]
+            //{
+            //    new SkinDef.MeshReplacement
+            //    {
+            //        mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenrySwordAlt"),
+            //        renderer = defaultRenderers[0].renderer
+            //    },
+            //    new SkinDef.MeshReplacement
+            //    {
+            //        mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenryAlt"),
+            //        renderer = defaultRenderers[instance.mainRendererIndex].renderer
+            //    }
+            //};
 
             skins.Add(masterySkin);
             #endregion

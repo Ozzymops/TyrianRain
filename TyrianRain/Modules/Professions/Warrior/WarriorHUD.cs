@@ -11,47 +11,133 @@ namespace TyrianRain.Modules.Professions.Warrior
 {
     public class WarriorHUD : MonoBehaviour
     {
-        string prefabName = "WarriorHUD";
+        private HUD baseHUD;
+        private GameObject customHUD;
 
-        private HUD hud;
-        private GameObject customHud;
+        #region HUD components
+        private Image _adrenalineBar;
+        private Text _adrenalineCounter;
 
-        private int adrenaline;
-        private int maxAdrenaline;
-        private int adrenalineThreshold;
+        private Image _weaponSwap;
+        private Text _weaponSwapCounter;
+        #endregion
 
-        private void Awake()
+        private int _adrenaline;
+        private int _maxAdrenaline;
+        private int _adrenalineThreshold;
+
+        private int _weaponIndex;
+        private float _weaponSwapTimer;
+
+        private string prefabName = "WarriorHUD";
+
+        private void OnEnable()
         {
-            On.RoR2.UI.HUD.Awake += AddHudPrefab;
-            this.gameObject.GetComponent<WarriorAdrenaline>().OnAdrenalineUpdated += UpdateAdrenaline;
+            WarriorAdrenaline.OnAdrenalineSetup += SetupAdrenaline;
+            WarriorAdrenaline.OnAdrenalineChanged += UpdateAdrenaline;
+            WarriorWeaponSwap.OnWeaponSwap += UpdateWeaponSwap;
+
+            On.RoR2.UI.HUD.Awake += BuildHUD;
         }
 
-        private void AddHudPrefab(On.RoR2.UI.HUD.orig_Awake orig, RoR2.UI.HUD self)
+        private void OnDisable()
+        {
+            WarriorAdrenaline.OnAdrenalineSetup -= SetupAdrenaline;
+            WarriorAdrenaline.OnAdrenalineChanged -= UpdateAdrenaline;
+            WarriorWeaponSwap.OnWeaponSwap -= UpdateWeaponSwap;
+
+            On.RoR2.UI.HUD.Awake -= BuildHUD;
+        }
+
+        /// <summary>
+        /// Instantiate HUD prefab and setup appropriate images/values
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="self"></param>
+        private void BuildHUD(On.RoR2.UI.HUD.orig_Awake orig, RoR2.UI.HUD self)
         {
             orig(self);
-            hud = self;
+            baseHUD = self;
 
-            // elite spec checks
+            customHUD = GameObject.Instantiate(Modules.Assets.mainAssetBundle.LoadAsset<GameObject>(prefabName), baseHUD.mainContainer.transform);
 
-            customHud = GameObject.Instantiate(Modules.Assets.mainAssetBundle.LoadAsset<GameObject>(prefabName), hud.mainContainer.transform);
-            customHud.transform.GetChild(0).GetChild(0).GetComponent<Image>().fillAmount = 0;
-            customHud.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = "0/0";
+            // get components
+            _adrenalineBar = customHUD.transform.GetChild(0).GetChild(1).GetComponent<Image>();
+            _adrenalineCounter = customHUD.transform.GetChild(0).GetChild(3).GetComponent<Text>();
+
+            _weaponSwap = customHUD.transform.GetChild(1).GetChild(0).GetChild(1).GetComponent<Image>();
+            _weaponSwapCounter= customHUD.transform.GetChild(1).GetChild(0).GetChild(2).GetComponent<Text>();
+
+            // todo: get weapon images, cooldown image          
         }
 
         private void Update()
         {
-            if (maxAdrenaline != 0)
+            if (_weaponSwapTimer > 0.0f)
             {
-                customHud.transform.GetChild(0).GetChild(0).GetComponent<Image>().fillAmount = adrenaline / maxAdrenaline;
-                customHud.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = (adrenaline + "/" + maxAdrenaline);
+                _weaponSwapTimer -= 1.0f * Time.deltaTime;
+
+                _weaponSwap.fillAmount = Mathf.Lerp(_weaponSwap.fillAmount, 1.0f - _weaponSwapTimer / 10.0f, 1.0f);
+                _weaponSwapCounter.text = FloatHelper(_weaponSwapTimer);
             }
+            else
+            {
+                _weaponSwap.fillAmount = 1.0f;
+                _weaponSwapCounter.text = "";
+            }
+            
+            _adrenalineBar.fillAmount = Mathf.Lerp(_adrenalineBar.fillAmount, _adrenaline / _maxAdrenaline, 1.0f);
+            _adrenalineCounter.text = _adrenaline + "/" + _maxAdrenaline;            
         }
 
-        public void UpdateAdrenaline(int adrenaline, int maxAdrenaline, int adrenalineThreshold)
+        /// <summary>
+        /// Set maximum adrenaline and threshold bars for adrenaline levels
+        /// </summary>
+        /// <param name="maximumAdrenaline">Maximum adrenaline value</param>
+        /// <param name="adrenalineThreshold">Adrenaline threshold for levels (basically maximum divided by 3)</param>
+        private void SetupAdrenaline(int maximumAdrenaline, int adrenalineThreshold)
         {
-            this.adrenaline = adrenaline;
-            this.maxAdrenaline = maxAdrenaline;
-            this.adrenalineThreshold = adrenalineThreshold;
+            _maxAdrenaline = maximumAdrenaline;
+            _adrenalineThreshold = adrenalineThreshold;
+
+            // todo: set adrenaline threshold bars
+        }
+
+        /// <summary>
+        /// Set adrenaline value
+        /// </summary>
+        /// <param name="adrenaline">Current adrenaline value</param>
+        private void UpdateAdrenaline(int adrenaline)
+        {
+            _adrenaline = adrenaline;
+        }
+
+        /// <summary>
+        /// Activate weapon cooldown timer and change selected weapon
+        /// </summary>
+        /// <param name="index">Weapon index</param>
+        /// <param name="timer">Weapon Swap cooldown timer</param>
+        private void UpdateWeaponSwap(int index, float timer)
+        {
+            _weaponIndex = index;
+            _weaponSwapTimer = timer;
+        }
+
+        /// <summary>
+        /// Return a float above 3.0 as single digit, otherwise as double digits
+        /// </summary>
+        /// <param name="f">Float to handle</param>
+        /// <returns></returns>
+        private string FloatHelper(float f)
+        {
+            if (f > 3.0f)
+            {
+                return f.ToString("0");
+            }
+            else
+            {
+                return f.ToString("0.0");
+            }
         }
     }
 }

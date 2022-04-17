@@ -9,7 +9,7 @@ namespace TyrianRain.SkillStates.Warrior
     {
         public override void OnEnter()
         {
-            this.hitboxName = "Sword";
+            this.hitboxName = "Surround";
 
             this.damageType = DamageType.Generic;
             this.damageCoefficient = Modules.StaticValues.hammerStaggeringBlowDamageCoefficient;
@@ -56,7 +56,7 @@ namespace TyrianRain.SkillStates.Warrior
 
             if (NetworkServer.active)
             {
-                characterBody.GetComponent<Modules.Professions.Warrior.WarriorAdrenaline>().UpdateAdrenaline(2);
+                characterBody.GetComponent<Modules.Professions.Warrior.WarriorAdrenaline>().SetAdrenaline(2);
             }
         }
 
