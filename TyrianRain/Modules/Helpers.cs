@@ -6,6 +6,8 @@ namespace TyrianRain.Modules
     internal static class Helpers
     {
         internal const string agilePrefix = "<style=cIsUtility>Agile.</style> ";
+        internal const string chainPrefix = "<style=cIsUtility>Attack Chain.</style> ";
+        internal const string chainEnderPrefix = "<style=cIsUtility>Attack Chain Ender.</style> ";
 
         internal static string ScepterDescription(string desc)
         {

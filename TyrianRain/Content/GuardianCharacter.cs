@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace TyrianRain.Modules.Survivors
 {
-    internal class MyCharacter : SurvivorBase
+    internal class GuardianCharacter : SurvivorBase
     {
         public override string bodyName => "Henry";
 
@@ -19,8 +19,8 @@ namespace TyrianRain.Modules.Survivors
         public override BodyInfo bodyInfo { get; set; } = new BodyInfo
         {
             bodyName = "HenryBody",
-            bodyNameToken = TyrianRain.DEVELOPER_PREFIX + "_HENRY_BODY_NAME",
-            subtitleNameToken = TyrianRain.DEVELOPER_PREFIX + "_HENRY_BODY_SUBTITLE",
+            bodyNameToken = TyrianRain.DEVELOPER_PREFIX + "_GUARDIAN_BODY_NAME",           // _HENRY_BODY_NAME
+            subtitleNameToken = TyrianRain.DEVELOPER_PREFIX + "_GUARDIAN_BODY_SUBTITLE",   // _HENRY_BODY_SUBTITLE
 
             characterPortrait = Assets.mainAssetBundle.LoadAsset<Texture>("texHenryIcon"),
             bodyColor = Color.white,
@@ -28,9 +28,9 @@ namespace TyrianRain.Modules.Survivors
             crosshair = Modules.Assets.LoadCrosshair("Standard"),
             podPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
 
-            maxHealth = 110f,
-            healthRegen = 1.5f,
-            armor = 0f,
+            maxHealth = 100f,
+            healthRegen = 0.0f,
+            armor = 20f,
 
             jumpCount = 1,
         };
@@ -91,23 +91,30 @@ namespace TyrianRain.Modules.Survivors
 
             #region Primary
             //Creates a skilldef for a typical primary 
-            SkillDef primarySkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo(prefix + "_HENRY_BODY_PRIMARY_SLASH_NAME",
-                                                                                      prefix + "_HENRY_BODY_PRIMARY_SLASH_DESCRIPTION",
+            SkillDef primaryStaffSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo(prefix + "_GUARDIAN_BODY_PRIMARY_STAFF_CHAIN1_NAME",
+                                                                                      prefix + "_GUARDIAN_BODY_PRIMARY_STAFF_CHAIN1_DESCRIPTION",
+                                                                                      Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                                                                                      new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shoot)),
+                                                                                      "Slide",
+                                                                                      true));
+
+            SkillDef primaryGreatswordSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo(prefix + "_GUARDIAN_BODY_PRIMARY_GREATSWORD_CHAIN1_NAME",
+                                                                                      prefix + "_GUARDIAN_BODY_PRIMARY_GREATSWORD_CHAIN1_DESCRIPTION",
                                                                                       Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
                                                                                       new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)),
                                                                                       "Weapon",
                                                                                       true));
 
 
-            Modules.Skills.AddPrimarySkills(bodyPrefab, primarySkillDef);
+            Modules.Skills.AddPrimarySkills(bodyPrefab, new SkillDef[] { primaryStaffSkillDef, primaryGreatswordSkillDef });
             #endregion
 
             #region Secondary
-            SkillDef shootSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef secondaryStaffSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = prefix + "_HENRY_BODY_SECONDARY_GUN_NAME",
-                skillNameToken = prefix + "_HENRY_BODY_SECONDARY_GUN_NAME",
-                skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_GUN_DESCRIPTION",
+                skillName = prefix + "_GUARDIAN_BODY_SECONDARY_STAFF_NAME",
+                skillNameToken = prefix + "_GUARDIAN_BODY_SECONDARY_STAFF_NAME",
+                skillDescriptionToken = prefix + "_GUARDIAN_BODY_SECONDARY_STAFF_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shoot)),
                 activationStateMachineName = "Slide",
@@ -124,19 +131,42 @@ namespace TyrianRain.Modules.Survivors
                 cancelSprintingOnActivation = false,
                 rechargeStock = 1,
                 requiredStock = 1,
-                stockToConsume = 1,
-                keywordTokens = new string[] { "KEYWORD_AGILE" }
+                stockToConsume = 1
             });
 
-            Modules.Skills.AddSecondarySkills(bodyPrefab, shootSkillDef);
+            SkillDef secondaryGreatswordSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = prefix + "_GUARDIAN_BODY_SECONDARY_GREATSWORD_NAME",
+                skillNameToken = prefix + "_GUARDIAN_BODY_SECONDARY_GREATSWORD_NAME",
+                skillDescriptionToken = prefix + "_GUARDIAN_BODY_SECONDARY_GREATSWORD_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)),
+                activationStateMachineName = "Weapon",
+                baseMaxStock = 1,
+                baseRechargeInterval = 1f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = false,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+                resetCooldownTimerOnUse = false,
+                isCombatSkill = true,
+                mustKeyPress = false,
+                cancelSprintingOnActivation = false,
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1
+            });
+
+            Modules.Skills.AddSecondarySkills(bodyPrefab, new SkillDef[] { secondaryStaffSkillDef, secondaryGreatswordSkillDef });
             #endregion
 
             #region Utility
-            SkillDef rollSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef utilityStaffSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = prefix + "_HENRY_BODY_UTILITY_ROLL_NAME",
-                skillNameToken = prefix + "_HENRY_BODY_UTILITY_ROLL_NAME",
-                skillDescriptionToken = prefix + "_HENRY_BODY_UTILITY_ROLL_DESCRIPTION",
+                skillName = prefix + "_GUARDIAN_BODY_UTILITY_STAFF_NAME",
+                skillNameToken = prefix + "_GUARDIAN_BODY_UTILITY_STAFF_NAME",
+                skillDescriptionToken = prefix + "_GUARDIAN_BODY_UTILITY_STAFF_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Roll)),
                 activationStateMachineName = "Body",
@@ -156,15 +186,39 @@ namespace TyrianRain.Modules.Survivors
                 stockToConsume = 1
             });
 
-            Modules.Skills.AddUtilitySkills(bodyPrefab, rollSkillDef);
+            SkillDef utilityGreatswordSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = prefix + "_GUARDIAN_BODY_UTILITY_GREATSWORD_NAME",
+                skillNameToken = prefix + "_GUARDIAN_BODY_UTILITY_GREATSWORD_NAME",
+                skillDescriptionToken = prefix + "_GUARDIAN_BODY_UTILITY_GREATSWORD_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Roll)),
+                activationStateMachineName = "Body",
+                baseMaxStock = 1,
+                baseRechargeInterval = 4f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = true,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+                resetCooldownTimerOnUse = false,
+                isCombatSkill = false,
+                mustKeyPress = false,
+                cancelSprintingOnActivation = false,
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1
+            });
+
+            Modules.Skills.AddUtilitySkills(bodyPrefab, new SkillDef[] { utilityStaffSkillDef, utilityGreatswordSkillDef });
             #endregion
 
             #region Special
-            SkillDef bombSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef specialStaffSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = prefix + "_HENRY_BODY_SPECIAL_BOMB_NAME",
-                skillNameToken = prefix + "_HENRY_BODY_SPECIAL_BOMB_NAME",
-                skillDescriptionToken = prefix + "_HENRY_BODY_SPECIAL_BOMB_DESCRIPTION",
+                skillName = prefix + "_GUARDIAN_BODY_SPECIAL_STAFF_NAME",
+                skillNameToken = prefix + "_GUARDIAN_BODY_SPECIAL_STAFF_NAME",
+                skillDescriptionToken = prefix + "_GUARDIAN_BODY_SPECIAL_STAFF_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
                 activationStateMachineName = "Slide",
@@ -184,7 +238,31 @@ namespace TyrianRain.Modules.Survivors
                 stockToConsume = 1
             });
 
-            Modules.Skills.AddSpecialSkills(bodyPrefab, bombSkillDef);
+            SkillDef specialGreatswordSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = prefix + "_GUARDIAN_BODY_SPECIAL_GREATSWORD_CHAIN1_NAME",
+                skillNameToken = prefix + "_GUARDIAN_BODY_SPECIAL_GREATSWORD_CHAIN1_NAME",
+                skillDescriptionToken = prefix + "_GUARDIAN_BODY_SPECIAL_GREATSWORD_CHAIN1_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
+                activationStateMachineName = "Slide",
+                baseMaxStock = 1,
+                baseRechargeInterval = 10f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = false,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+                resetCooldownTimerOnUse = false,
+                isCombatSkill = true,
+                mustKeyPress = false,
+                cancelSprintingOnActivation = true,
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1
+            });
+
+            Modules.Skills.AddSpecialSkills(bodyPrefab, new SkillDef[] { specialStaffSkillDef, specialGreatswordSkillDef });
             #endregion
         }
 
